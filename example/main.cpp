@@ -7,6 +7,13 @@
 #include <webgpu/webgpu_glfw.h>
 #endif
 #include <vector>
+#include <math/Vector3.h>
+#include <time.h>
+#include <iostream>
+
+
+using namespace std;
+
 wgpu::Instance instance;
 wgpu::Device device;
 wgpu::RenderPipeline pipeline;
@@ -14,6 +21,9 @@ wgpu::RenderPipeline pipeline;
 wgpu::SwapChain swapChain;
 const uint32_t kWidth = 512;
 const uint32_t kHeight = 512;
+
+
+
 
 void SetupSwapChain(wgpu::Surface surface) {
 	wgpu::SwapChainDescriptor scDesc{
@@ -140,6 +150,18 @@ void Start() {
 }
 
 int main() {
+	mix::Vector3 v1(1, 2, 3);
+	mix::Vector3 v2(1, 2, 3);
+
+	clock_t start_time = clock();
+	for (int i = 0; i < 100000000; ++i) 
+	{
+		v1.add(v2);
+		v1.sub(v2);
+	}
+	clock_t end_time = clock();
+	std::cout << "1,testStringÓÃÊ±:" << end_time - start_time << std::endl;
+
 	instance = wgpu::CreateInstance();
 	GetDevice([](wgpu::Device dev) {
 		device = dev;
