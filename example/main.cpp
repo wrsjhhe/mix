@@ -7,7 +7,7 @@
 #include <webgpu/webgpu_glfw.h>
 #endif
 #include <vector>
-#include <math/Vector3.h>
+#include <math/Matrix4.h>
 #include <time.h>
 #include <iostream>
 
@@ -150,14 +150,13 @@ void Start() {
 }
 
 int main() {
-	mix::Vector3 v1(1, 2, 3);
-	mix::Vector3 v2(1, 2, 3);
+	mix::Matrix4 mat1;
+	mix::Matrix4 mat2;
 
 	clock_t start_time = clock();
-	for (int i = 0; i < 100000000; ++i) 
+	for (int i = 0; i < 100000000; ++i)
 	{
-		v1.add(v2);
-		v1.sub(v2);
+		mat1.premultiply(mat2);
 	}
 	clock_t end_time = clock();
 	std::cout << "1,testStringÓÃÊ±:" << end_time - start_time << std::endl;
