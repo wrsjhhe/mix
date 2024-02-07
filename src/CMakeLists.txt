@@ -4,8 +4,82 @@ include_directories(${publicHeaderDir})
 
 set(publicHeaders 
 	
-	"math/Vector3.h"
+	"core/BufferAttribute.h"
+	"core/BufferGeometry.h"
+	"core/Clock.h"
+	"core/EventDispatcher.h"
+	"core/Face3.h"
+	"core/Layers.h"
+	"core/misc.h"
+	"core/InstancedBufferAttribute.h"
+	"core/InstancedBufferGeometry.h"
+	"core/InterleavedBuffer.h"
+	"core/InterleavedBufferAttribute.h"
+	"core/Object3D.h"
+	"core/Raycaster.h"
+	"core/Shader.h"
+	"core/Uniform.h"
+
+	"renderers/GLRenderTarget.h"
+
+	"cameras/Camera.h"
+	"cameras/PerspectiveCamera.h"
+	"cameras/OrthographicCamera.h"
+
+	"materials/Material.h"
+	"materials/SpriteMaterial.h"
+	"materials/interfaces.h"
+
+	"objects/Sprite.h"
+
+	"lights/lights.h"
+	"lights/Light.h"
+	"lights/LightProbe.h"
+	"lights/AmbientLight.h"
+	"lights/DirectionalLight.h"
+	"lights/DirectionalLightShadow.h"
+	"lights/HemisphereLight.h"
+	"lights/LightShadow.h"
+	"lights/PointLight.h"
+	"lights/PointLightShadow.h"
+	"lights/SpotLight.h"
+	"lights/SpotLightShadow.h"
+
+	"textures/DataTexture.h"
+	"textures/DataTexture3D.h"
+	"textures/DepthTexture.h"
+	"textures/Image.h"
+	"textures/Texture.h"
+
+	"scenes/Fog.h"
+	"scenes/FogExp2.h"
+	"scenes/Scene.h"
+
+	"math/Box2.h"
+	"math/Box3.h"
+	"math/Capsule.h"
+	"math/Color.h"
+	"math/Cylindrical.h"
+	"math/Euler.h"
+	"math/float_view.h"
+	"math/Frustum.h"
+	"math/ImprovedNoise.h"
+	"math/Line3.h"
+	"math/MathUtils.h"
+	"math/Matrix3.h"
 	"math/Matrix4.h"
+	"math/Plane.h"
+	"math/Ray.h"
+	"math/Sphere.h"
+	"math/Spherical.h"
+	"math/SphericalHarmonics3.h"
+	"math/Triangle.h"
+	"math/Vector2.h"
+	"math/Vector3.h"
+	"math/Vector4.h"
+	"math/Quaternion.h"
+
+	"utils/StringUtils.h"
 
 )
 set(publicHeadersFull)
@@ -14,18 +88,69 @@ foreach (header IN LISTS publicHeaders)
 endforeach ()
 
 set(sources 
-	"math/Vector3.cpp"
-	"math/Matrix4.cpp"
+
+        "core/BufferGeometry.cpp"
+        "core/Clock.cpp"
+        "core/EventDispatcher.cpp"
+        "core/Layers.cpp"
+        "core/Object3D.cpp"
+        "core/Raycaster.cpp"
+        "core/Uniform.cpp"
+
+		"renderers/GLRenderTarget.cpp"
+
+		"cameras/Camera.cpp"
+        "cameras/PerspectiveCamera.cpp"
+        "cameras/OrthographicCamera.cpp"
+
+		"materials/Material.cpp"
+		"materials/SpriteMaterial.cpp"
+
+		"objects/Sprite.cpp"
+
+		"lights/AmbientLight.cpp"
+        "lights/DirectionalLight.cpp"
+        "lights/HemisphereLight.cpp"
+        "lights/Light.cpp"
+        "lights/LightShadow.cpp"
+        "lights/PointLight.cpp"
+        "lights/PointLightShadow.cpp"
+        "lights/SpotLight.cpp"
+        "lights/SpotLightShadow.cpp"
+
+		"scenes/Scene.cpp"
+        "scenes/Fog.cpp"
+        "scenes/FogExp2.cpp"
+
+		"textures/Texture.cpp"
+        "textures/DataTexture3D.cpp"
+
+	    "math/Box2.cpp"
+        "math/Box3.cpp"
+        "math/Capsule.cpp"
+        "math/Color.cpp"
+        "math/Cylindrical.cpp"
+        "math/Euler.cpp"
+        "math/Frustum.cpp"
+        "math/ImprovedNoise.cpp"
+        "math/Line3.cpp"
+        "math/MathUtils.cpp"
+        "math/Matrix3.cpp"
+        "math/Matrix4.cpp"
+        "math/Plane.cpp"
+        "math/Ray.cpp"
+        "math/Sphere.cpp"
+        "math/Spherical.cpp"
+        "math/SphericalHarmonics3.cpp"
+        "math/Triangle.cpp"
+        "math/Vector2.cpp"
+        "math/Vector3.cpp"
+        "math/Vector4.cpp"
+        "math/Quaternion.cpp"
+
+		"utils/StringUtils.cpp"
 )
 
 add_library(mix ${sources} ${publicHeadersFull})
 
-if(EMSCRIPTEN)
-	add_definitions(-D_XM_NO_INTRINSICS_)
-	add_definitions(-D__EMSCRIPTEN__)
-	set_target_properties(mix  PROPERTIES SUFFIX ".js")
-	target_link_options(mix  PRIVATE "-sUSE_WEBGPU=1" "-sUSE_GLFW=3")
-else()
-	target_compile_options(mix PRIVATE "/arch:AVX2")
-	target_link_libraries(mix  PUBLIC webgpu_cpp webgpu_dawn webgpu_glfw)
-endif()
+target_link_libraries(mix  PUBLIC webgpu_cpp webgpu_dawn webgpu_glfw)

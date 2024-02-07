@@ -6,8 +6,6 @@ set(THIRDPARTY_DIR ${PROJECT_SOURCE_DIR}/thirdparty/)
 
 set(DAWN_FETCH_DEPENDENCIES ON)
 
-include_directories(${THIRDPARTY_DIR}DirectXMath)
-
 if(NOT EMSCRIPTEN)
 	add_subdirectory(${THIRDPARTY_DIR}dawn EXCLUDE_FROM_ALL)
 endif()

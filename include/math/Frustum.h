@@ -1,6 +1,6 @@
 #pragma once
 
-#include <math/Plane.hpp>
+#include <math/Plane.h>
 
 #include <array>
 
