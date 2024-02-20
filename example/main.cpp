@@ -1,33 +1,37 @@
-#include <glfw3webgpu.h>
-#include <GLFW/glfw3.h>
-
 #define WEBGPU_CPP_IMPLEMENTATION
-#include <webgpu/webgpu.hpp>
-
+#include <glfw3webgpu.h>
 #include <iostream>
 #include <cassert>
+#include <canvas/Canvas.h>
+#include <webgpu/webgpu.hpp>
 
 using namespace wgpu;
+using namespace mix;
 
 int main(int, char**) {
+
 	Instance instance = createInstance(InstanceDescriptor{});
+
 	if (!instance) {
 		std::cerr << "Could not initialize WebGPU!" << std::endl;
 		return 1;
 	}
 
-	if (!glfwInit()) {
-		std::cerr << "Could not initialize GLFW!" << std::endl;
-		return 1;
-	}
+	Canvas canvas("BoxGeometry", { });
+	auto window = (GLFWwindow*)(canvas.windowPtr());
 
-	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-	GLFWwindow* window = glfwCreateWindow(640, 480, "Learn WebGPU", NULL, NULL);
-	if (!window) {
-		std::cerr << "Could not open window!" << std::endl;
-		return 1;
-	}
+	//if (!glfwInit()) {
+	//	std::cerr << "Could not initialize GLFW!" << std::endl;
+	//	return 1;
+	//}
+
+	//glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+	//glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+	//GLFWwindow* window = glfwCreateWindow(640, 480, "Learn WebGPU", NULL, NULL);
+	//if (!window) {
+	//	std::cerr << "Could not open window!" << std::endl;
+	//	return 1;
+	//}
 
 	std::cout << "Requesting adapter..." << std::endl;
 	Surface surface = glfwGetWGPUSurface(instance, window);
@@ -54,7 +58,6 @@ int main(int, char**) {
 
 	Queue queue = device.getQueue();
 
-	std::cout << "Creating swapchain..." << std::endl;
 #ifdef WEBGPU_BACKEND_WGPU
 	TextureFormat swapChainFormat = surface.getPreferredFormat(adapter);
 #else
@@ -67,9 +70,6 @@ int main(int, char**) {
 	swapChainDesc.format = swapChainFormat;
 	swapChainDesc.presentMode = PresentMode::Fifo;
 	SwapChain swapChain = device.createSwapChain(surface, swapChainDesc);
-	std::cout << "Swapchain: " << swapChain << std::endl;
-
-	std::cout << "Creating shader module..." << std::endl;
 	const char* shaderSource = R"(
 @vertex
 fn vs_main(@builtin(vertex_index) in_vertex_index: u32) -> @builtin(position) vec4<f32> {
@@ -184,6 +184,54 @@ fn fs_main() -> @location(0) vec4f {
 
 	RenderPipeline pipeline = device.createRenderPipeline(pipelineDesc);
 	std::cout << "Render pipeline: " << pipeline << std::endl;
+
+	//canvas.animate([&]() {
+	//	TextureView nextTexture = swapChain.getCurrentTextureView();
+	//	if (!nextTexture) {
+	//		std::cerr << "Cannot acquire next swap chain texture" << std::endl;
+	//		return 1;
+	//	}
+
+	//	CommandEncoderDescriptor commandEncoderDesc;
+	//	commandEncoderDesc.label = "Command Encoder";
+	//	CommandEncoder encoder = device.createCommandEncoder(commandEncoderDesc);
+
+	//	RenderPassDescriptor renderPassDesc;
+
+	//	RenderPassColorAttachment renderPassColorAttachment;
+	//	renderPassColorAttachment.view = nextTexture;
+	//	renderPassColorAttachment.resolveTarget = nullptr;
+	//	renderPassColorAttachment.loadOp = LoadOp::Clear;
+	//	renderPassColorAttachment.storeOp = StoreOp::Store;
+	//	renderPassColorAttachment.clearValue = Color{ 0.9, 0.1, 0.2, 1.0 };
+	//	renderPassDesc.colorAttachmentCount = 1;
+	//	renderPassDesc.colorAttachments = &renderPassColorAttachment;
+
+	//	renderPassDesc.depthStencilAttachment = nullptr;
+	//	renderPassDesc.timestampWriteCount = 0;
+	//	renderPassDesc.timestampWrites = nullptr;
+	//	RenderPassEncoder renderPass = encoder.beginRenderPass(renderPassDesc);
+
+	//	// In its overall outline, drawing a triangle is as simple as this:
+	//	// Select which render pipeline to use
+	//	renderPass.setPipeline(pipeline);
+	//	// Draw 1 instance of a 3-vertices shape
+	//	renderPass.draw(3, 1, 0, 0);
+
+	//	renderPass.end();
+	//	renderPass.release();
+
+	//	nextTexture.release();
+
+	//	CommandBufferDescriptor cmdBufferDescriptor;
+	//	cmdBufferDescriptor.label = "Command buffer";
+	//	CommandBuffer command = encoder.finish(cmdBufferDescriptor);
+	//	encoder.release();
+	//	queue.submit(command);
+	//	command.release();
+
+	//	swapChain.present();
+	//});
 
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();

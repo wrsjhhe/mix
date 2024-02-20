@@ -11,6 +11,12 @@
 #include <unordered_map>
 #include <variant>
 
+
+namespace wgpu {
+    class Surface;
+    class Instance;
+}
+
 namespace mix {
 
     class Canvas: public PeripheralsEventSource {
@@ -26,7 +32,7 @@ namespace mix {
         Canvas(const std::string& name, const std::unordered_map<std::string, ParameterValue>& values);
 
         //the current size of the Canvas window
-        [[nodiscard]] WindowSize size() const;
+        [[nodiscard]] WindowSize size() const override;
 
         //the size of the Monitor
         [[nodiscard]] WindowSize monitorSize() const;
