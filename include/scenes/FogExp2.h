@@ -1,7 +1,4 @@
-// https://github.com/mrdoob/three.js/blob/r129/src/scenes/FogExp2.js
-
-#ifndef THREEPP_FOGEXP2_HPP
-#define THREEPP_FOGEXP2_HPP
+#pragma once
 
 #include <math/Color.h>
 
@@ -18,6 +15,4 @@ namespace mix {
         bool operator==(const FogExp2& f) const;
     };
 
-}// namespace mix
-
-#endif//THREEPP_FOGEXP2_HPP
+}

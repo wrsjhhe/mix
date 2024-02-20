@@ -3,7 +3,10 @@ set(publicHeaderDir ${PROJECT_SOURCE_DIR}/include/)
 include_directories(${publicHeaderDir})
 
 set(publicHeaders 
-	
+
+    "canvas/Canvas.h"
+    "canvas/WindowSize.h"
+
 	"core/BufferAttribute.h"
 	"core/BufferGeometry.h"
 	"core/Clock.h"
@@ -19,6 +22,10 @@ set(publicHeaders
 	"core/Raycaster.h"
 	"core/Shader.h"
 	"core/Uniform.h"
+
+	"input/KeyListener.h"
+    "input/MouseListener.h"
+    "input/PeripheralsEventSource.h"
 
 	"renderers/GLRenderTarget.h"
 
@@ -79,6 +86,8 @@ set(publicHeaders
 	"math/Vector4.h"
 	"math/Quaternion.h"
 
+	"loaders/ImageLoader.h"
+
 	"utils/StringUtils.h"
 
 )
@@ -88,6 +97,7 @@ foreach (header IN LISTS publicHeaders)
 endforeach ()
 
 set(sources 
+		"canvas/Canvas.cpp"
 
         "core/BufferGeometry.cpp"
         "core/Clock.cpp"
@@ -96,6 +106,8 @@ set(sources
         "core/Object3D.cpp"
         "core/Raycaster.cpp"
         "core/Uniform.cpp"
+
+		"input/PeripheralsEventSource.cpp"
 
 		"renderers/GLRenderTarget.cpp"
 
@@ -148,9 +160,11 @@ set(sources
         "math/Vector4.cpp"
         "math/Quaternion.cpp"
 
+		"loaders/ImageLoader.cpp"
+
 		"utils/StringUtils.cpp"
 )
 
 add_library(mix ${sources} ${publicHeadersFull})
 
-target_link_libraries(mix  PUBLIC webgpu_cpp webgpu_dawn webgpu_glfw)
+target_link_libraries(mix PUBLIC webgpu glfw3webgpu)

@@ -1,7 +1,4 @@
-// https://github.com/mrdoob/three.js/blob/r129/src/scenes/Scene.js
-
-#ifndef THREEPP_SCENE_HPP
-#define THREEPP_SCENE_HPP
+#pragma once
 
 #include <core/Object3D.h>
 
@@ -30,6 +27,4 @@ namespace mix {
         static std::shared_ptr<Scene> create();
     };
 
-}// namespace mix
-
-#endif//THREEPP_SCENE_HPP
+}

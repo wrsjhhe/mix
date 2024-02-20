@@ -11,3 +11,4 @@ if(EMSCRIPTEN)
 	target_link_options(app  PRIVATE "-sUSE_WEBGPU=1" "-sUSE_GLFW=3")
 endif()
 
+target_copy_webgpu_binaries(app)
