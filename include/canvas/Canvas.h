@@ -11,12 +11,6 @@
 #include <unordered_map>
 #include <variant>
 
-
-namespace wgpu {
-    class Surface;
-    class Instance;
-}
-
 namespace mix {
 
     class Canvas: public PeripheralsEventSource {

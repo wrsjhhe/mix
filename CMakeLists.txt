@@ -7,10 +7,13 @@ set(THIRDPARTY_DIR ${PROJECT_SOURCE_DIR}/thirdparty/)
 set(DAWN_FETCH_DEPENDENCIES ON)
 
 if(NOT EMSCRIPTEN)
-	include(E:/vcpkg/scripts/buildsystems/vcpkg.cmake)
+	include(E:/git_download/vcpkg/scripts/buildsystems/vcpkg.cmake)
 	include_directories(${CMAKE_CURRENT_BINARY_DIR}/vcpkg_installed/x64-windows/include/)
 	link_directories(${CMAKE_CURRENT_BINARY_DIR}/vcpkg_installed/x64-windows/lib/)
 endif()
+
+# set(WEBGPU_BACKEND DAWN)
+# add_definitions(-DWEBGPU_CPP_IMPLEMENTATION)
 
 add_subdirectory(webgpu)
 add_subdirectory(glfw3webgpu)

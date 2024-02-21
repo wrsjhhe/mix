@@ -27,6 +27,8 @@ set(publicHeaders
     "input/MouseListener.h"
     "input/PeripheralsEventSource.h"
 
+	"renderers/backend/webgpu.h"
+	"renderers/WebGPURenderer.h"
 	"renderers/GLRenderTarget.h"
 
 	"cameras/Camera.h"
@@ -109,6 +111,7 @@ set(sources
 
 		"input/PeripheralsEventSource.cpp"
 
+		"renderers/WebGPURenderer.cpp"
 		"renderers/GLRenderTarget.cpp"
 
 		"cameras/Camera.cpp"

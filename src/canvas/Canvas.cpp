@@ -5,12 +5,10 @@
 #include <utils/StringUtils.h>
 
 #ifndef EMSCRIPTEN
-#define GLFW_INCLUDE_NONE
-#include <glfw3webgpu.h>
+
 #else
 #include <emscripten.h>
 #endif
-#include <webgpu/webgpu.hpp>
 #include <GLFW/glfw3.h>
 
 #include <iostream>
@@ -18,7 +16,6 @@
 #include <queue>
 
 using namespace mix;
-//using namespace wgpu;
 
 namespace {
 
