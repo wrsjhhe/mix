@@ -8,7 +8,6 @@ int main(int, char**) {
 
 	Canvas canvas("BoxGeometry", { });
 	WebGPURenderer renderer;
-	renderer.setContainer(canvas);
 
 	return 0;
 }

@@ -36,6 +36,8 @@ namespace mix {
 
         Color& copy(const Color& color);
 
+        Color clone();
+
         Color& add(const Color& color);
 
         Color& addColors(const Color& color1, const Color& color2);

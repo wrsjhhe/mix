@@ -1,7 +1,7 @@
 
 #include <lights/LightShadow.h>
 
-#include <renderers/GLRenderTarget.h>
+#include <renderers/RenderTarget.h>
 #include <lights/light_interfaces.h>
 
 using namespace mix;

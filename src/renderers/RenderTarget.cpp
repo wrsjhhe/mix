@@ -1,17 +1,17 @@
 
-#include <renderers/GLRenderTarget.h>
+#include <renderers/RenderTarget.h>
 
 #include <math/MathUtils.h>
 
 using namespace mix;
 
 
-std::unique_ptr<GLRenderTarget> GLRenderTarget::create(unsigned int width, unsigned int height, const GLRenderTarget::Options& options) {
+std::unique_ptr<RenderTarget> RenderTarget::create(unsigned int width, unsigned int height, const RenderTarget::Options& options) {
 
-	return std::make_unique<GLRenderTarget>(width, height, options);
+	return std::make_unique<RenderTarget>(width, height, options);
 }
 
-GLRenderTarget::GLRenderTarget(unsigned int width, unsigned int height, const GLRenderTarget::Options& options)
+RenderTarget::RenderTarget(unsigned int width, unsigned int height, const RenderTarget::Options& options)
 	: uuid(math::generateUUID()),
 	width(width), height(height),
 	scissor(0.f, 0.f, (float)width, (float)height),
@@ -30,7 +30,7 @@ GLRenderTarget::GLRenderTarget(unsigned int width, unsigned int height, const GL
 	if (options.encoding) texture->encoding = *options.encoding;
 }
 
-void GLRenderTarget::setSize(unsigned int width, unsigned int height, unsigned int depth) {
+void RenderTarget::setSize(unsigned int width, unsigned int height, unsigned int depth) {
 
 	if (this->width != width || this->height != height || this->depth != depth) {
 
@@ -49,7 +49,7 @@ void GLRenderTarget::setSize(unsigned int width, unsigned int height, unsigned i
 	this->scissor.set(0, 0, (float)width, (float)height);
 }
 
-GLRenderTarget& GLRenderTarget::copy(const GLRenderTarget& source) {
+RenderTarget& RenderTarget::copy(const RenderTarget& source) {
 
 	this->width = source.width;
 	this->height = source.height;
@@ -67,7 +67,7 @@ GLRenderTarget& GLRenderTarget::copy(const GLRenderTarget& source) {
 	return *this;
 }
 
-void GLRenderTarget::dispose() {
+void RenderTarget::dispose() {
 
 	if (!disposed) {
 
@@ -76,7 +76,7 @@ void GLRenderTarget::dispose() {
 	}
 }
 
-GLRenderTarget::~GLRenderTarget() {
+RenderTarget::~RenderTarget() {
 
 	dispose();
 }

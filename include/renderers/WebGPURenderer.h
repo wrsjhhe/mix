@@ -1,19 +1,13 @@
 #pragma once
-#include <memory>
+
+#include <renderers/common/Renderer.h>
 
 namespace mix {
-	class Canvas;
 
-	class WebGPURenderer {
+
+	class WebGPURenderer : public Renderer {
 	public:
-		WebGPURenderer();
+		WebGPURenderer(Renderer::Parameters parameters = {});
 
-		void setContainer(Canvas& canvas);
-
-		void render();
-
-	private:
-		struct Impl;
-		std::shared_ptr<Impl> pimpl_;
 	};
 }

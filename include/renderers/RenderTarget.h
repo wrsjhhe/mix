@@ -12,7 +12,7 @@ namespace mix {
 
     class DepthTexture;
 
-    class GLRenderTarget : public EventDispatcher {
+    class RenderTarget : public EventDispatcher {
 
     public:
         struct Options {
@@ -50,21 +50,21 @@ namespace mix {
         bool stencilBuffer;
         std::shared_ptr<DepthTexture> depthTexture;
 
-        GLRenderTarget(unsigned int width, unsigned int height, const Options& options);
+        RenderTarget(unsigned int width, unsigned int height, const Options& options);
 
-        GLRenderTarget(const GLRenderTarget&) = delete;
-        GLRenderTarget(const GLRenderTarget&&) = delete;
-        GLRenderTarget operator=(const GLRenderTarget&) = delete;
+        RenderTarget(const RenderTarget&) = delete;
+        RenderTarget(const RenderTarget&&) = delete;
+        RenderTarget operator=(const RenderTarget&) = delete;
 
         void setSize(unsigned int width, unsigned int height, unsigned int depth = 1);
 
-        GLRenderTarget& copy(const GLRenderTarget& source);
+        RenderTarget& copy(const RenderTarget& source);
 
         void dispose();
 
-        static std::unique_ptr<GLRenderTarget> create(unsigned int width, unsigned int height, const Options& options);
+        static std::unique_ptr<RenderTarget> create(unsigned int width, unsigned int height, const Options& options);
 
-        ~GLRenderTarget() override;
+        ~RenderTarget() override;
 
     protected:
         bool disposed = false;
