@@ -23,6 +23,8 @@ namespace mix {
 
         unsigned int id = textureId++;
 
+        bool isRenderTargetTexture = false;
+
         std::string uuid;
 
         std::string name;

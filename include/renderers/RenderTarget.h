@@ -31,6 +31,9 @@ namespace mix {
             bool depthBuffer = true;
             bool stencilBuffer = false;
             std::shared_ptr<DepthTexture> depthTexture;
+
+            std::optional<unsigned int> samples = 0;
+            std::optional<unsigned int> count = 1;
         };
 
         const std::string uuid;
@@ -39,12 +42,16 @@ namespace mix {
         unsigned int height;
         unsigned int depth = 1;
 
+        unsigned int count = 1;
+
+        unsigned int samples = 0;
+
         Vector4 scissor;
         bool scissorTest = false;
 
         Vector4 viewport;
 
-        std::shared_ptr<Texture> texture;
+        std::vector<std::shared_ptr<Texture>> textures;
 
         bool depthBuffer;
         bool stencilBuffer;
@@ -57,6 +64,8 @@ namespace mix {
         RenderTarget operator=(const RenderTarget&) = delete;
 
         void setSize(unsigned int width, unsigned int height, unsigned int depth = 1);
+
+        std::shared_ptr<Texture> texture();
 
         RenderTarget& copy(const RenderTarget& source);
 

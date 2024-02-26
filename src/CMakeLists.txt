@@ -6,6 +6,9 @@ set(publicHeaders
 
     "canvas/Canvas.h"
     "canvas/WindowSize.h"
+	
+	"nodes/core/constants.h"
+	"nodes/core/NodeFrame.h"
 
 	"core/BufferAttribute.h"
 	"core/BufferGeometry.h"
@@ -123,6 +126,8 @@ endforeach ()
 
 set(sources 
 		"canvas/Canvas.cpp"
+
+		"nodes/core/NodeFrame.cpp"
 
         "core/BufferGeometry.cpp"
         "core/Clock.cpp"

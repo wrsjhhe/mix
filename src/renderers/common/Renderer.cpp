@@ -15,8 +15,14 @@
 #include <renderers/common/RenderObjects.h>
 #include <renderers/common/RenderLists.h>
 #include <renderers/common/RenderContexts.h>
+#include <renderers/common/RenderContext.h>
 
 #include <renderers/RenderTarget.h>
+
+#include <nodes/core/NodeFrame.h>
+
+#include <cameras/Camera.h>
+#include <scenes/Scene.h>
 
 #include <GLFW/glfw3.h>
 #include <renderers/common/Renderer.h>
@@ -25,7 +31,11 @@
 
 using namespace mix;
 
+static Vector2 _drawingBufferSize;
+static Vector4 _screen;
+
 struct Renderer::Impl {
+	std::shared_ptr<Renderer> renderer = nullptr;
 	std::shared_ptr<Backend> backend = nullptr;
 	std::shared_ptr<Canvas> domElement = nullptr;
 
@@ -90,14 +100,91 @@ struct Renderer::Impl {
 	};
 	ShadowMap shadowMap;
 
-	Impl(const std::shared_ptr<Backend>& backend, const Parameters& parameters) : backend(backend), domElement(backend->getDomElement()) {
+	RenderContext* _currentRenderContext = nullptr;
+
+	Impl(const std::shared_ptr<Renderer>& renderer, const std::shared_ptr<Backend>& backend, const Parameters& parameters)
+		:renderer(renderer), backend(backend), domElement(backend->getDomElement()) {
 
 	}
 
 	~Impl() {}
+
+	void init() {
+		_nodes = std::make_shared<Nodes>(renderer, backend);
+	}
+
+	void render(Scene& scene, Camera& camera) {
+		const std::shared_ptr<NodeFrame>& nodeFrame = _nodes->nodeFrame;
+
+		const int previousRenderId = nodeFrame->renderId;
+		const RenderContext* previousRenderContext = _currentRenderContext;
+		//const previousRenderObjectFunction = this._currentRenderObjectFunction;
+
+		auto renderTarget = _renderTarget;
+		auto renderContext = _renderContexts->get(&scene, &camera, renderTarget.get());
+		auto activeCubeFace = _activeCubeFace;
+		auto activeMipmapLevel = _activeMipmapLevel;
+
+		_currentRenderContext = renderContext;
+
+		info.calls++;
+		info.render.calls++;
+
+		nodeFrame->renderId = info.calls;
+
+		if (scene.matrixWorldNeedsUpdate == true) scene.updateMatrixWorld();
+
+		if (camera.parent == nullptr && camera.matrixWorldAutoUpdate == true) camera.updateMatrixWorld();
+
+		if (info.autoReset == true) info.reset();
+
+		Vector4& viewport = _viewport;
+		Vector4& scissor = _scissor;
+		float pixelRatio = _pixelRatio;
+
+		if (renderTarget != nullptr) {
+			viewport = renderTarget->viewport;
+			scissor = renderTarget->scissor;
+			pixelRatio = 1;
+		}
+		getDrawingBufferSize(_drawingBufferSize);
+
+		_screen.set(0, 0, _drawingBufferSize.x, _drawingBufferSize.y);
+
+		const unsigned int minDepth = 0;
+		const unsigned int maxDepth = 1;
+
+		renderContext->viewportValue.copy(viewport).multiplyScalar(pixelRatio).floor();
+		int width = renderContext->viewportValue.z;
+		int height = renderContext->viewportValue.w;
+		width >>= activeMipmapLevel;
+		height >>= activeMipmapLevel;
+		renderContext->viewportValue.z = width;
+		renderContext->viewportValue.w = height;
+		renderContext->viewport = renderContext->viewportValue.equals(_screen) == false;
+
+		renderContext->scissorValue.copy(scissor).multiplyScalar(pixelRatio).floor();
+		renderContext->scissor = _scissorTest && renderContext->scissorValue.equals(_screen) == false;
+		width = renderContext->scissorValue.z;
+		height = renderContext->scissorValue.w;
+		width >>= activeMipmapLevel;
+		height >>= activeMipmapLevel;
+		renderContext->scissorValue.z = width;
+		renderContext->scissorValue.w = height;
+	}
+
+	Vector2 getDrawingBufferSize(Vector2& target) {
+		target.set(_width * _pixelRatio, _height * _pixelRatio).floor();
+	}
 };
 
-Renderer::Renderer(const std::shared_ptr<Backend>& backend, const Parameters& parameters) :pimpl_(std::make_shared<Impl>(backend, parameters)) {
+Renderer::Renderer(const std::shared_ptr<Backend>& backend, const Parameters& parameters) :pimpl_(std::make_shared<Impl>(shared_from_this(), backend, parameters)) {
+
+}
+
+
+
+void Renderer::init() {
 
 }
 

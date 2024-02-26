@@ -5,13 +5,15 @@
 namespace mix {
 	class Backend;
 
-	class Renderer {
+	class Renderer : public std::enable_shared_from_this<Renderer> {
 	public:
 		struct Parameters
 		{
 
 		};
 		Renderer(const std::shared_ptr<Backend>& backend, const Parameters& parameters = {});
+
+		void init();
 
 		void render();
 

@@ -16,8 +16,9 @@ RenderTarget::RenderTarget(unsigned int width, unsigned int height, const Render
 	width(width), height(height),
 	scissor(0.f, 0.f, (float)width, (float)height),
 	viewport(0.f, 0.f, (float)width, (float)height),
-	texture(Texture::create(std::nullopt)),
 	depthBuffer(options.depthBuffer), stencilBuffer(options.stencilBuffer), depthTexture(options.depthTexture) {
+
+	auto texture = Texture::create(std::nullopt);
 
 	if (options.mapping) texture->mapping = *options.mapping;
 	if (options.wrapS) texture->wrapS = *options.wrapS;
@@ -28,6 +29,13 @@ RenderTarget::RenderTarget(unsigned int width, unsigned int height, const Render
 	if (options.type) texture->type = *options.type;
 	if (options.anisotropy) texture->anisotropy = *options.anisotropy;
 	if (options.encoding) texture->encoding = *options.encoding;
+	if (options.samples) count = *options.samples;
+	if (options.count) count = *options.count;
+
+	for (int i = 0; i < count; ++i) {
+		textures[i] = texture->clone();
+		textures[i]->isRenderTargetTexture = true;
+	}
 }
 
 void RenderTarget::setSize(unsigned int width, unsigned int height, unsigned int depth) {
@@ -38,15 +46,22 @@ void RenderTarget::setSize(unsigned int width, unsigned int height, unsigned int
 		this->height = height;
 		this->depth = depth;
 
-		this->texture->image->width = width;
-		this->texture->image->height = height;
-		this->texture->image->depth = depth;
+		for (int i = 0; i < textures.size(); ++i) {
+			this->textures[i]->image->width = width;
+			this->textures[i]->image->height = height;
+			this->textures[i]->image->depth = depth;
+		}
+	
 
 		this->dispose();
 	}
 
 	this->viewport.set(0, 0, (float)width, (float)height);
 	this->scissor.set(0, 0, (float)width, (float)height);
+}
+
+std::shared_ptr<Texture> RenderTarget::texture() {
+	return textures[0];
 }
 
 RenderTarget& RenderTarget::copy(const RenderTarget& source) {
@@ -57,12 +72,16 @@ RenderTarget& RenderTarget::copy(const RenderTarget& source) {
 
 	this->viewport.copy(source.viewport);
 
-	this->texture = source.texture;
+	this->textures = source.textures;
 	//                this->texture.image = { ...this->texture.image }; // See #20328.
 
 	this->depthBuffer = source.depthBuffer;
 	this->stencilBuffer = source.stencilBuffer;
 	this->depthTexture = source.depthTexture;
+
+	this->samples = source.samples;
+
+	this->count = source.count;
 
 	return *this;
 }

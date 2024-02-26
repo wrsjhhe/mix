@@ -234,4 +234,5 @@ namespace mix {
 		LinearDisplayP3ColorSpace
 	};
 
+	const int WebGPUCoordinateSystem = 2001;
 }

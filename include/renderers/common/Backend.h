@@ -6,7 +6,7 @@
 
 namespace mix {
 	class Renderer;
-	class RenderContext;
+	struct RenderContext;
 	class RenderObject;
 
 	class Backend {

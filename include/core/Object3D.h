@@ -97,6 +97,8 @@ namespace mix {
         // When this property is set for an instance of Group, all descendants objects will be sorted and rendered together. Sorting is from lowest to highest renderOrder. Default value is 0.
         unsigned int renderOrder = 0;
 
+        bool matrixWorldAutoUpdate = true;
+
         std::optional<RenderCallback> onBeforeRender;
         std::optional<RenderCallback> onAfterRender;
 
