@@ -20,22 +20,14 @@
 
 #include <GLFW/glfw3.h>
 #include <renderers/common/Renderer.h>
-#define WEBGPU_CPP_IMPLEMENTATION
-#include <webgpu/webgpu.hpp>
+
 #include <glfw3webgpu.h>
 
 using namespace mix;
-using namespace wgpu;
 
 struct Renderer::Impl {
 	std::shared_ptr<Backend> backend = nullptr;
 	std::shared_ptr<Canvas> domElement = nullptr;
-
-	Instance m_instance = nullptr;
-	Surface m_surface = nullptr;
-	Adapter m_adapter = nullptr;
-	Device m_device = nullptr;
-	Queue m_queue = nullptr;
 
 	bool logarithmicDepthBuffer = false;
 
@@ -102,12 +94,7 @@ struct Renderer::Impl {
 
 	}
 
-	~Impl() {
-		m_device.release();
-		m_adapter.release();
-		m_surface.release();
-		m_instance.release();
-	}
+	~Impl() {}
 };
 
 Renderer::Renderer(const std::shared_ptr<Backend>& backend, const Parameters& parameters) :pimpl_(std::make_shared<Impl>(backend, parameters)) {
