@@ -2,10 +2,6 @@
 
 using namespace mix;
 
-Color4::Color4() :Color();
-{
-
-}
 
 Color4::Color4(float r, float g, float b, float a /*= 1*/) :Color(r, g, b), a(a)
 {
@@ -13,7 +9,7 @@ Color4::Color4(float r, float g, float b, float a /*= 1*/) :Color(r, g, b), a(a)
 }
 
 
-Color4::Color4& Color4::set(float r, float g, float b, float a /*= 1*/)
+Color4& Color4::Color4::set(float r, float g, float b, float a /*= 1*/)
 {
 	this->r = r;
 	this->g = g;
@@ -21,7 +17,7 @@ Color4::Color4& Color4::set(float r, float g, float b, float a /*= 1*/)
 	this->a = a;
 }
 
-Color4::Color4& Color4::copy(const Color4& color)
+Color4& Color4::Color4::copy(const Color4& color)
 {
 	this->r = color.r;
 	this->g = color.g;
@@ -29,7 +25,7 @@ Color4::Color4& Color4::copy(const Color4& color)
 	this->a = color.a;
 }
 
-Color4::Color4 Color4::clone()
+Color4 Color4::Color4::clone()
 {
 	return Color4(r, g, b, a);
 }

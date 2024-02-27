@@ -28,14 +28,14 @@ RenderContext* RenderContexts::get(const Scene* scene, const Camera* camera, Ren
 
 	auto chainMap = chainMaps[attachmentState];
 
-	auto renderState = chainMap.find(chainKey);
-	if (renderState == chainMap.end()) {
-		chainMap[chainKey] = std::shared_ptr<RenderContext>();
+	auto iter2 = chainMap.find(chainKey);
+	if (iter2 == chainMap.end()) {
+		chainMap[chainKey] = std::make_shared<RenderContext>();
 	}
-	
-	if (renderTarget != nullptr) renderState->second->sampleCount = renderTarget->samples == 0 ? 1 : renderTarget->samples;
+	auto renderState = chainMap[chainKey];
+	if (renderTarget != nullptr) renderState->sampleCount = renderTarget->samples == 0 ? 1 : renderTarget->samples;
 
-	return renderState->second.get();
+	return renderState.get();
 }
 
 void  RenderContexts::dispose() {

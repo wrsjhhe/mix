@@ -5,8 +5,8 @@
 
 using namespace mix;
 
-Nodes::Nodes(const std::shared_ptr<Renderer>renderer, const std::shared_ptr<Backend> backend) 
+Nodes::Nodes(Renderer* renderer, Backend* backend) 
 	: renderer(renderer), backend(backend),
-		nodeFrame(new NodeFrame()){
+		nodeFrame(std::make_shared<NodeFrame>()){
 
 }

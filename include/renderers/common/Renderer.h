@@ -1,11 +1,14 @@
 #pragma once
 
 #include <memory>
+#include <vector>
+#include <math/Plane.h>
 
 namespace mix {
 	class Backend;
-
-	class Renderer : public std::enable_shared_from_this<Renderer> {
+	class Scene;
+	class Camera;
+	class Renderer {
 	public:
 		struct Parameters
 		{
@@ -15,7 +18,11 @@ namespace mix {
 
 		void init();
 
-		void render();
+		void render(Scene& scene, Camera& camera);
+
+		std::vector<Plane> clippingPlanes;
+		bool localClippingEnabled = false;
+
 
 	private:
 		struct Impl;

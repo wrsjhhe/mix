@@ -4,10 +4,12 @@
 #include <textures/Texture.h>
 #include <vector>
 
+#include <renderers/common/ClippingContext.h>
+
 namespace mix {
 	struct RenderContext {
-
-		unsigned int id = RenderContext::_id++;
+		RenderContext();
+		unsigned int id;
 
 		bool color = true;
 		bool clearColor = true;
@@ -35,8 +37,7 @@ namespace mix {
 		float width = 0;
 		float height = 0;
 
-	private:
-		static unsigned int _id;
+		std::shared_ptr<ClippingContext> clippingContext;
 	};
 
 

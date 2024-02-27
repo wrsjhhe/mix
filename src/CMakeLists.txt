@@ -8,7 +8,11 @@ set(publicHeaders
     "canvas/WindowSize.h"
 	
 	"nodes/core/constants.h"
+	"nodes/core/Node.h"
 	"nodes/core/NodeFrame.h"
+	"nodes/materials/NodeMaterial.h"
+	"nodes/lighting/LightNode.h"
+	"nodes/lighting/LightsNode.h"
 
 	"core/BufferAttribute.h"
 	"core/BufferGeometry.h"
@@ -43,9 +47,11 @@ set(publicHeaders
 	"renderers/common/Bindings.h"
 	"renderers/common/RenderObject.h"
 	"renderers/common/RenderObjects.h"
+	"renderers/common/RenderList.h"
 	"renderers/common/RenderLists.h"
 	"renderers/common/RenderContext.h"
 	"renderers/common/RenderContexts.h"
+	"renderers/common/ClippingContext.h"
 
 	"renderers/webgpu/utils/WebGPUUtils.h"
 	"renderers/webgpu/utils/WebGPUAttributeUtils.h"
@@ -94,6 +100,7 @@ set(publicHeaders
 	"math/Box3.h"
 	"math/Capsule.h"
 	"math/Color.h"
+	"math/Color4.h"
 	"math/Cylindrical.h"
 	"math/Euler.h"
 	"math/float_view.h"
@@ -127,7 +134,11 @@ endforeach ()
 set(sources 
 		"canvas/Canvas.cpp"
 
+		"nodes/core/Node.cpp"
 		"nodes/core/NodeFrame.cpp"
+		"nodes/materials/NodeMaterial.cpp"
+		"nodes/lighting/LightNode.cpp"
+		"nodes/lighting/LightsNode.cpp"
 
         "core/BufferGeometry.cpp"
         "core/Clock.cpp"
@@ -152,9 +163,11 @@ set(sources
 		"renderers/common/Bindings.cpp"
 		"renderers/common/RenderObject.cpp"
 		"renderers/common/RenderObjects.cpp"
+		"renderers/common/RenderList.cpp"
 		"renderers/common/RenderLists.cpp"
 		"renderers/common/RenderContext.cpp"
 		"renderers/common/RenderContexts.cpp"
+		"renderers/common/ClippingContext.cpp"
 
 		"renderers/webgpu/utils/WebGPUUtils.cpp"
 		"renderers/webgpu/utils/WebGPUAttributeUtils.cpp"
@@ -196,6 +209,7 @@ set(sources
         "math/Box3.cpp"
         "math/Capsule.cpp"
         "math/Color.cpp"
+		"math/Color4.cpp"
         "math/Cylindrical.cpp"
         "math/Euler.cpp"
         "math/Frustum.cpp"

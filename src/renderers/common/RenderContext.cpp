@@ -1,5 +1,8 @@
 #include <renderers/common/RenderContext.h>
 
+static unsigned int _id = 0;
 using namespace mix;
 
-unsigned int RenderContext::_id = 0;
+RenderContext::RenderContext():id(_id++){
+
+}

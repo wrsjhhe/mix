@@ -9,13 +9,13 @@ namespace mix {
 	class Nodes {
 	public:
 		Nodes() = delete;
-		Nodes(const std::shared_ptr<Renderer> renderer, const std::shared_ptr<Backend> backend);
+		Nodes(Renderer* renderer, Backend* backend);
 
 
 		std::shared_ptr<NodeFrame> nodeFrame;
 	private:
-		std::shared_ptr<Renderer> renderer;
-		std::shared_ptr<Backend> backend;
+		Renderer* renderer;
+		Backend* backend;
 
 	};
 }

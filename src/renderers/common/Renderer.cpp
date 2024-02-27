@@ -35,7 +35,9 @@ static Vector2 _drawingBufferSize;
 static Vector4 _screen;
 
 struct Renderer::Impl {
-	std::shared_ptr<Renderer> renderer = nullptr;
+	bool _initialized = false;
+
+	Renderer* renderer = nullptr;
 	std::shared_ptr<Backend> backend = nullptr;
 	std::shared_ptr<Canvas> domElement = nullptr;
 
@@ -102,7 +104,7 @@ struct Renderer::Impl {
 
 	RenderContext* _currentRenderContext = nullptr;
 
-	Impl(const std::shared_ptr<Renderer>& renderer, const std::shared_ptr<Backend>& backend, const Parameters& parameters)
+	Impl(Renderer* renderer, const std::shared_ptr<Backend>& backend, const Parameters& parameters)
 		:renderer(renderer), backend(backend), domElement(backend->getDomElement()) {
 
 	}
@@ -110,11 +112,18 @@ struct Renderer::Impl {
 	~Impl() {}
 
 	void init() {
-		_nodes = std::make_shared<Nodes>(renderer, backend);
+		_nodes = std::make_shared<Nodes>(renderer, backend.get());
+		_renderContexts = std::make_shared<RenderContexts>();
+		_renderLists = std::make_shared<RenderLists>();
+
+		_initialized = true;
 	}
 
 	void render(Scene& scene, Camera& camera) {
-		const std::shared_ptr<NodeFrame>& nodeFrame = _nodes->nodeFrame;
+		if (!_initialized) {
+			init();
+		}
+		auto nodeFrame = _nodes->nodeFrame;
 
 		const int previousRenderId = nodeFrame->renderId;
 		const RenderContext* previousRenderContext = _currentRenderContext;
@@ -171,14 +180,26 @@ struct Renderer::Impl {
 		height >>= activeMipmapLevel;
 		renderContext->scissorValue.z = width;
 		renderContext->scissorValue.w = height;
+
+		if (renderContext->clippingContext == nullptr) {
+			renderContext->clippingContext = std::make_shared<ClippingContext>();
+		}
+
+		// sceneRef.onBeforeRender(this, scene, camera, renderTarget);
+		auto renderList = _renderLists->get(&scene, &camera);
+
+		renderList->begin();
+
+		_projectObject();
+
 	}
 
-	Vector2 getDrawingBufferSize(Vector2& target) {
-		target.set(_width * _pixelRatio, _height * _pixelRatio).floor();
+	Vector2& getDrawingBufferSize(Vector2& target) {
+		return target.set(_width * _pixelRatio, _height * _pixelRatio).floor();
 	}
 };
 
-Renderer::Renderer(const std::shared_ptr<Backend>& backend, const Parameters& parameters) :pimpl_(std::make_shared<Impl>(shared_from_this(), backend, parameters)) {
+Renderer::Renderer(const std::shared_ptr<Backend>& backend, const Parameters& parameters) :pimpl_(std::make_shared<Impl>(this, backend, parameters)) {
 
 }
 
@@ -188,6 +209,6 @@ void Renderer::init() {
 
 }
 
-void Renderer::render() {
-
+void Renderer::render(Scene& scene, Camera& camera) {
+	pimpl_->render(scene, camera);
 }
