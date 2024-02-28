@@ -6,7 +6,7 @@ namespace mix {
 	class Object3D;
 	class BufferGeometry;
 	class Material;
-	class GeometryGroup;
+	struct GeometryGroup;
 	class Light;
 	class LightsNode;
 

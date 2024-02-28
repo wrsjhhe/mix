@@ -82,6 +82,7 @@ RenderList::RenderList():lightsNode(std::make_shared<LightsNode>()){
 
 RenderList& RenderList::begin() {
 	renderItemsIndex = 0;
+	return *this;
 }
 
 std::shared_ptr<RenderList::RenderItem> RenderList::getNextRenderItem(Object3D* object,

@@ -1,7 +1,11 @@
 #include <canvas/Canvas.h>
 #include <constants.h>
+
 #include <math/Vector4.h>
+#include <math/Matrix4.h>
 #include <math/Color4.h>
+#include <math/Frustum.h>
+
 #include <renderers/common/Info.h>
 #include <renderers/common/Backend.h>
 #include <renderers/common/Attributes.h>
@@ -24,6 +28,12 @@
 #include <cameras/Camera.h>
 #include <scenes/Scene.h>
 
+#include <objects/Group.h>
+#include <objects/LOD.h>
+#include <objects/Sprite.h>
+
+#include <lights/Light.h>
+
 #include <GLFW/glfw3.h>
 #include <renderers/common/Renderer.h>
 
@@ -33,6 +43,9 @@ using namespace mix;
 
 static Vector2 _drawingBufferSize;
 static Vector4 _screen;
+static Frustum _frustum;
+static Vector3 _vector3;
+static Matrix4 _projScreenMatrix;
 
 struct Renderer::Impl {
 	bool _initialized = false;
@@ -190,12 +203,95 @@ struct Renderer::Impl {
 
 		renderList->begin();
 
-		_projectObject();
+		_projectObject(&scene,camera,0,renderList);
 
 	}
 
 	Vector2& getDrawingBufferSize(Vector2& target) {
 		return target.set(_width * _pixelRatio, _height * _pixelRatio).floor();
+	}
+
+	void _projectObject(Object3D* object,Camera& camera,unsigned int groupOrder,RenderList* renderList) {
+		if (object->visible == false) return;
+
+		bool visible = object->layers.test(camera.layers);
+
+		if (visible) {
+			if (object->type() == "Group") {
+				groupOrder = object->renderOrder;
+			}
+			else if (object->type() == "LOD") {
+				auto lod = dynamic_cast<LOD*>(object);
+				if (lod->autoUpdate == true) lod->update(camera);
+			}
+			else if (object->type() == "Light") {
+				auto light = dynamic_cast<Light*>(object);
+				renderList->pushLight(light);
+			}
+			else if (object->type() == "Sprite") {
+				auto sprite = dynamic_cast<Sprite*>(object);
+				if (!object->frustumCulled || _frustum.intersectsSprite(*sprite)) {
+					if (sortObjects == true) {
+						_vector3.setFromMatrixPosition(*object->matrixWorld).applyMatrix4(_projScreenMatrix);
+					}
+
+					auto geometry = sprite->geometry();
+					auto material = sprite->material;
+					if (material->visible) {
+						renderList->push(object, geometry, material.get(), groupOrder, _vector3.z, nullptr);
+					}
+				}
+			}
+			else if (object->type() == "LineLoop") {
+			}
+			else if (object->type() == "Mesh" || object->type() == "Line" || object->type() == "Points") {
+				auto geometry = object->geometry();
+				auto materials = object->materials();
+
+				if (sortObjects == true) {
+
+					if (!geometry->boundingSphere.has_value()) geometry->computeBoundingSphere();
+
+					_vector3
+						.copy(geometry->boundingSphere->center)
+						.applyMatrix4(*object->matrixWorld)
+						.applyMatrix4(_projScreenMatrix);
+
+				}
+
+				if (materials.size() > 1) {
+
+					auto groups = geometry->groups;
+
+					for (size_t i = 0, l = groups.size(); i < l; ++i) {
+
+						auto group = groups[i];
+						auto groupMaterial = materials[group.materialIndex];
+
+						if (groupMaterial && groupMaterial->visible) {
+
+							renderList->push(object, geometry, groupMaterial, groupOrder, _vector3.z, &group);
+
+						}
+
+					}
+
+				}
+				else if (object->material()->visible) {
+
+					renderList->push(object, geometry, object->material(), groupOrder, _vector3.z, nullptr);
+
+				}
+			}
+		}
+
+		auto children = object->children;
+
+		for (size_t i = 0, l = children.size(); i < l; ++i) {
+
+			_projectObject(children[i], camera, groupOrder, renderList);
+
+		}
 	}
 };
 
