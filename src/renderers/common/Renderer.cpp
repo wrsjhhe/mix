@@ -38,6 +38,7 @@
 #include <renderers/common/Renderer.h>
 
 #include <glfw3webgpu.h>
+#include <iostream>
 
 using namespace mix;
 
@@ -205,11 +206,17 @@ struct Renderer::Impl {
 
 		_projectObject(&scene,camera,0,renderList);
 
+		renderList->finish();
+
+		if (sortObjects == true) {
+			renderList->sort();
+		}
 	}
 
 	Vector2& getDrawingBufferSize(Vector2& target) {
 		return target.set(_width * _pixelRatio, _height * _pixelRatio).floor();
 	}
+
 
 	void _projectObject(Object3D* object,Camera& camera,unsigned int groupOrder,RenderList* renderList) {
 		if (object->visible == false) return;
@@ -217,18 +224,20 @@ struct Renderer::Impl {
 		bool visible = object->layers.test(camera.layers);
 
 		if (visible) {
-			if (object->type() == "Group") {
+			std::string objectType = object->type();
+
+			if (objectType == "Group") {
 				groupOrder = object->renderOrder;
 			}
-			else if (object->type() == "LOD") {
+			else if (objectType == "LOD") {
 				auto lod = dynamic_cast<LOD*>(object);
 				if (lod->autoUpdate == true) lod->update(camera);
 			}
-			else if (object->type() == "Light") {
+			else if (objectType == "Light") {
 				auto light = dynamic_cast<Light*>(object);
 				renderList->pushLight(light);
 			}
-			else if (object->type() == "Sprite") {
+			else if (objectType == "Sprite") {
 				auto sprite = dynamic_cast<Sprite*>(object);
 				if (!object->frustumCulled || _frustum.intersectsSprite(*sprite)) {
 					if (sortObjects == true) {
@@ -242,9 +251,10 @@ struct Renderer::Impl {
 					}
 				}
 			}
-			else if (object->type() == "LineLoop") {
-			}
-			else if (object->type() == "Mesh" || object->type() == "Line" || object->type() == "Points") {
+			/*	else if (object->type() == "LineLoop") {
+
+				}*/
+			else if (objectType == "Mesh" || objectType == "Line" || objectType == "Points") {
 				auto geometry = object->geometry();
 				auto materials = object->materials();
 
@@ -282,6 +292,10 @@ struct Renderer::Impl {
 					renderList->push(object, geometry, object->material(), groupOrder, _vector3.z, nullptr);
 
 				}
+			}
+			else if (objectType == "Scene") {
+				int a = 0;
+				a++;
 			}
 		}
 

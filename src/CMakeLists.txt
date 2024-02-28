@@ -13,6 +13,7 @@ set(publicHeaders
 	"nodes/materials/NodeMaterial.h"
 	"nodes/lighting/LightNode.h"
 	"nodes/lighting/LightsNode.h"
+	"nodes/shadernode/ShaderNode.h"
 
 	"core/BufferAttribute.h"
 	"core/BufferGeometry.h"
@@ -152,6 +153,7 @@ set(sources
 		"nodes/materials/NodeMaterial.cpp"
 		"nodes/lighting/LightNode.cpp"
 		"nodes/lighting/LightsNode.cpp"
+		"nodes/shadernode/ShaderNode.cpp"
 
         "core/BufferGeometry.cpp"
         "core/Clock.cpp"

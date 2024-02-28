@@ -16,6 +16,8 @@ namespace mix {
     class Scene: public Object3D {
 
     public:
+        [[nodiscard]] std::string type() const override;
+
         std::optional<Color> background;
         std::shared_ptr<Texture> environment;
         std::optional<FogVariant> fog;

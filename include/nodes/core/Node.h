@@ -10,7 +10,7 @@ namespace mix {
 	public:
 		unsigned int id;
 
-		int nodeType = 0;
+		std::string nodeType = "";
 		NodeUpdateType updateType = NodeUpdateType::NONE;
 		NodeUpdateType updateBeforeType = NodeUpdateType::NONE;
 
@@ -18,6 +18,12 @@ namespace mix {
 
 		bool isNode = true;
 
-		explicit Node(int nodeType = 0);
+		explicit Node(const std::string& nodeType = "");
+
+		virtual bool isGlobal();
+
+		virtual std::string getHash( /*builder*/);
+
+
 	};
 }
