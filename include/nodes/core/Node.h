@@ -4,9 +4,13 @@
 #include <string>
 #include <math/MathUtils.h>
 #include <core/EventDispatcher.h>
+#include <nodes/core/IContainNodes.h>
+#include <functional>
 
 namespace mix {
-	class Node : public EventDispatcher {
+	typedef std::function<void(Node*)> NodeTraverseCallback;
+
+	class Node : public EventDispatcher, public IContainNodes {
 	public:
 		unsigned int id;
 
@@ -20,10 +24,22 @@ namespace mix {
 
 		explicit Node(const std::string& nodeType = "");
 
-		virtual bool isGlobal();
+		virtual ~Node();
 
-		virtual std::string getHash( /*builder*/);
+		virtual bool isGlobal() { return false; }
 
+		virtual void dispose() { dispatchEvent("dispose"); }
 
+		virtual void traverse(NodeTraverseCallback callback);
+
+		virtual std::string getCacheKey();
+
+		virtual std::string getHash( /*builder*/) { return uuid; }
+
+		NodeUpdateType getUpdateType() { return updateType; }
+
+		NodeUpdateType getUpdateBeforeType() { return updateBeforeType; }
+
+		NodeUpdateType getNodeType();
 	};
 }

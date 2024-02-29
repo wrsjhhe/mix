@@ -1,4 +1,5 @@
 #include <nodes/core/Node.h>
+#include <nodes/core/NodeUtils.h>
 
 static unsigned int _nodeId = 0;
 
@@ -8,10 +9,22 @@ Node::Node(const std::string& nodeType):EventDispatcher(), id(_nodeId++),nodeTyp
 
 }
 
-bool Node::isGlobal() {
-	return false;
+Node::~Node(){}
+
+
+std::string Node::getCacheKey() {
+	return NodeUtils::getCacheKey(this);
 }
 
-std::string Node::getHash() {
-	return uuid;
+void Node::traverse(NodeTraverseCallback callback) {
+	callback(this);
+
+	for (auto childNode : this->getChildren()) {
+		childNode.second->traverse(callback);
+	}
+}
+
+
+NodeUpdateType Node::getNodeType() {
+
 }
