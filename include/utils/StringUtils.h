@@ -8,6 +8,17 @@
 
 namespace mix::utils {
 
+	inline std::string slice(const std::string& s, int start, int end = -1) {
+		int size = s.size();
+		if (start > size)
+			return "";
+		end = end < 0 ? s.size() + end : end;
+		end = start < 0 ? s.size() : end;
+		start = start < 0 ? s.size() + start : start;
+		int length = end - start;
+		return s.substr(start, length);
+	}
+
 	inline std::vector<std::string> split(const std::string& s, char delimiter) {
 
 		std::string token;

@@ -151,6 +151,7 @@ set(publicHeaders
 	"loaders/ImageLoader.h"
 
 	"utils/StringUtils.h"
+	"utils/TypeUtils.h"
 
 )
 set(publicHeadersFull)

@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <memory>
 
 namespace mix {
 	class Object3D;
@@ -11,6 +12,7 @@ namespace mix {
 	class Scene;
 	class Material;
 	class Node;
+	class NodeCache;
 	class LightsNode;
 	class EnvironmentNode;
 	class FogNode;
@@ -87,6 +89,8 @@ namespace mix {
 
 		this.shaderStage = null;
 		this.buildStage = null;*/
+		std::shared_ptr<NodeCache> cache;
+		NodeCache* globalCache;
 
 	public:
 		NodeBuilder(Object3D* object,Renderer* renderer, NodeParser* parser, Scene* scene = nullptr,Material* material = nullptr);
