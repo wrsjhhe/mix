@@ -5,6 +5,6 @@
 
 using namespace mix;
 
-WebGPURenderer::WebGPURenderer(Renderer::Parameters parameters) : Renderer(std::make_shared<WebGPUBackend>(), parameters) {
+WebGPURenderer::WebGPURenderer(Renderer::Parameters parameters) : Renderer(std::make_shared<WebGPUBackend>(parameters), parameters) {
 
 }

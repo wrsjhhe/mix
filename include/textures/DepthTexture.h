@@ -6,7 +6,8 @@ namespace mix {
 
     class DepthTexture: public Texture {
 
-    protected:
+    public:
+        DepthTexture() = default;
         DepthTexture(int width, int height,
                      int type, int mapping,
                      int wrapS, int wrapT,

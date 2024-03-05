@@ -20,10 +20,12 @@ namespace mix {
 
     public:
         inline static Mapping DEFAULT_MAPPING = Mapping::UV;
+        inline static uint32_t DEFAULT_ANISOTROPY = 1;
 
         unsigned int id = textureId++;
 
         bool isRenderTargetTexture = false;
+        bool isStorageTexture = false;
 
         std::string uuid;
 
@@ -40,10 +42,10 @@ namespace mix {
         Filter magFilter{Filter::Linear};
         Filter minFilter{Filter::LinearMipmapLinear};
 
-        int anisotropy = 1;
+        int anisotropy = Texture::DEFAULT_ANISOTROPY;
 
         Format format{Format::RGBA};
-        std::optional<std::string> internalFormat;
+        std::optional<uint32_t> internalFormat;
         Type type{Type::UnsignedByte};
 
         Vector2 offset = Vector2(0, 0);
@@ -56,7 +58,10 @@ namespace mix {
 
         bool generateMipmaps = true;
         bool premultiplyAlpha = false;
+        bool flipY = true;
         int unpackAlignment = 4;// valid values: 1, 2, 4, 8 (see http://www.khronos.org/opengles/sdk/docs/man/xhtml/glPixelStorei.xml)
+
+        ColorSpace colorSpace = ColorSpace::NoColorSpace;
 
         // Values of encoding !== THREE.LinearEncoding only supported on map, envMap and emissiveMap.
         //

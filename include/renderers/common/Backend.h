@@ -3,28 +3,27 @@
 #include <unordered_map>
 #include <memory>
 #include <canvas/Canvas.h>
+#include <renderers/common/Renderer.h>
 
 namespace mix {
-	class Renderer;
 	struct RenderContext;
 	class RenderObject;
 
+	struct BackendResourceProperties
+	{
+
+	};
+
 	class Backend {
 	public:
-		struct Parameters
-		{
-			bool alpha = true;
-			bool antialias = false;
-			bool sampleCount = 1;
-			//requiredLimits
-			bool trackTimestamp = true;
 
-		};
-		Backend(const Parameters& parameters);
+	public:
+
+		Backend(const Renderer::Parameters& parameters);
 
 		virtual ~Backend();
 
-		virtual void init(const std::shared_ptr<Renderer>& renderer);
+		virtual void init(Renderer* renderer);
 
 		// render context
 		virtual void begin(std::shared_ptr<RenderContext>) {}
@@ -74,24 +73,25 @@ namespace mix {
 		virtual void hasFeatureAsync() { } // return Boolean
 		virtual void hasFeature() { } // return Boolean
 		virtual void getInstanceCount() { }
-		virtual void getDrawingBufferSize() { }
+		virtual Vector2& getDrawingBufferSize();
 		virtual void getScissor() { }
 		virtual void setScissorTest() { }
 		virtual void getClearColor() { }
-		virtual std::shared_ptr<Canvas> getDomElement();
+		virtual Canvas* getDomElement();
 
 		// resource properties
-		virtual void set() { }
-		virtual void get() { }
-		virtual void has() { }
-		virtual void remove() { }
+		virtual void set(void*,const std::shared_ptr<BackendResourceProperties>&);
+		virtual std::shared_ptr<BackendResourceProperties> get(void*);
+		virtual bool has(void*);
+		virtual void remove(void*);
 
 	protected:
-		Parameters parameters;
+		Renderer::Parameters parameters;
 		//std::unordered_map<x, x> data;
 
-		std::shared_ptr<Renderer> renderer;
-		std::shared_ptr<Canvas> canvas;
+		Renderer* renderer;
+
+		std::unordered_map<void*, std::shared_ptr<BackendResourceProperties>> data;
 	};
 
 }

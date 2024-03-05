@@ -116,6 +116,9 @@ set(publicHeaders
 	"textures/DataTexture.h"
 	"textures/DataTexture3D.h"
 	"textures/DepthTexture.h"
+	"textures/FramebufferTexture.h"
+	"textures/CompressedTexture.h"
+	"textures/VideoTexture.h"
 	"textures/Image.h"
 	"textures/Texture.h"
 

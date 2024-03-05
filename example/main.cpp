@@ -10,6 +10,7 @@ int main(int, char**) {
 
 	Canvas canvas("BoxGeometry", { });
 	WebGPURenderer renderer;
+	renderer.domElement = &canvas;
 
 	auto scene = Scene::create();
 	auto camera = PerspectiveCamera::create(60, 800/600, 0.1, 100);

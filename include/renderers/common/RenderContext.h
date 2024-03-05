@@ -37,6 +37,8 @@ namespace mix {
 		float width = 0;
 		float height = 0;
 
+		uint32_t occlusionQueryCount = 0;
+
 		std::shared_ptr<ClippingContext> clippingContext;
 	};
 

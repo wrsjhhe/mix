@@ -9,5 +9,6 @@ namespace mix {
 	public:
 		WebGPURenderer(Renderer::Parameters parameters = {});
 
+
 	};
 }
