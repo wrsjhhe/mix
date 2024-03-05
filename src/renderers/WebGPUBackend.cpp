@@ -89,7 +89,7 @@ void WebGPUBackend::beginRender(RenderContext* renderContext) {
 		// can be changed by another render pass before the buffer.mapAsyc() completes.
 		renderContextData->currentOcclusionQuerySet = renderContextData->occlusionQuerySet;
 		renderContextData->currentOcclusionQueryBuffer = renderContextData->occlusionQueryBuffer;
-		renderContextData->currentOcclusionQueryObjects = renderContextData->occlusionQueryObjects;
+		renderContextData->currentOcclusionQueryObjects.swap(renderContextData->occlusionQueryObjects);
 
 		QuerySetDescriptor querySetDescriptor{};
 		querySetDescriptor.type = WGPUQueryType::WGPUQueryType_Occlusion;
@@ -151,6 +151,13 @@ std::shared_ptr<RenderPassDescriptor> WebGPUBackend::_getDefaultRenderPassDescri
 
 		if (antialias) {
 			TextureViewDescriptor colorTextureViewDesc;
+			colorTextureViewDesc.aspect = TextureAspect::All;
+			colorTextureViewDesc.baseArrayLayer = 0;
+			colorTextureViewDesc.arrayLayerCount = 1;
+			colorTextureViewDesc.baseMipLevel = 0;
+			colorTextureViewDesc.mipLevelCount = 1;
+			colorTextureViewDesc.dimension = TextureViewDimension::_2D;
+			colorTextureViewDesc.format = TextureFormat::RGBA8Unorm;
 			colorAttachment.view = colorBuffer->createView(colorTextureViewDesc);
 		}
 		else {
