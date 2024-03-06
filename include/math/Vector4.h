@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ostream>
+#include <optional>
 
 namespace mix {
 
@@ -22,6 +23,15 @@ namespace mix {
         Vector4(float x, float y, float z, float w);
 
         float& operator[](unsigned int index);
+
+        void setWidth(float width) { z = width; }
+        float width() { return z; }
+
+        void setHeight(float height) { w = height; }
+        float height() { return w; }
+
+        std::optional<float> minDepth;
+        std::optional<float> maxDepth;
 
         Vector4& set(float x, float y, float z, float w);
 

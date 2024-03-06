@@ -5,6 +5,7 @@
 #include <vector>
 
 #include <renderers/common/ClippingContext.h>
+#include <renderers/RenderTarget.h>
 
 namespace mix {
 	struct RenderContext {
@@ -40,6 +41,9 @@ namespace mix {
 		uint32_t occlusionQueryCount = 0;
 
 		std::shared_ptr<ClippingContext> clippingContext;
+
+		RenderTarget* renderTarget = nullptr;
+		uint32_t activeMipmapLevel = 0;
 	};
 
 

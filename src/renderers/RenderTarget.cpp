@@ -6,12 +6,12 @@
 using namespace mix;
 
 
-std::unique_ptr<RenderTarget> RenderTarget::create(unsigned int width, unsigned int height, const RenderTarget::Options& options) {
+std::unique_ptr<RenderTarget> RenderTarget::create(uint32_t width, uint32_t height, const RenderTarget::Options& options) {
 
 	return std::make_unique<RenderTarget>(width, height, options);
 }
 
-RenderTarget::RenderTarget(unsigned int width, unsigned int height, const RenderTarget::Options& options)
+RenderTarget::RenderTarget(uint32_t width, uint32_t height, const RenderTarget::Options& options)
 	: uuid(math::generateUUID()),
 	width(width), height(height),
 	scissor(0.f, 0.f, (float)width, (float)height),
@@ -38,7 +38,7 @@ RenderTarget::RenderTarget(unsigned int width, unsigned int height, const Render
 	}
 }
 
-void RenderTarget::setSize(unsigned int width, unsigned int height, unsigned int depth) {
+void RenderTarget::setSize(uint32_t width, uint32_t height, uint32_t depth) {
 
 	if (this->width != width || this->height != height || this->depth != depth) {
 

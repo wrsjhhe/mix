@@ -32,19 +32,19 @@ namespace mix {
             bool stencilBuffer = false;
             std::shared_ptr<DepthTexture> depthTexture;
 
-            std::optional<unsigned int> samples = 0;
-            std::optional<unsigned int> count = 1;
+            std::optional<uint32_t> samples = 0;
+            std::optional<uint32_t> count = 1;
         };
 
         const std::string uuid;
 
-        unsigned int width;
-        unsigned int height;
-        unsigned int depth = 1;
+        uint32_t width;
+        uint32_t height;
+        uint32_t depth = 1;
 
-        unsigned int count = 1;
+        uint32_t count = 1;
 
-        unsigned int samples = 0;
+        uint32_t samples = 0;
 
         Vector4 scissor;
         bool scissorTest = false;
@@ -57,13 +57,15 @@ namespace mix {
         bool stencilBuffer;
         std::shared_ptr<DepthTexture> depthTexture;
 
-        RenderTarget(unsigned int width, unsigned int height, const Options& options);
+        uint32_t activeMipmapLevel = 0;
+
+        RenderTarget(uint32_t width, uint32_t height, const Options& options);
 
         RenderTarget(const RenderTarget&) = delete;
         RenderTarget(const RenderTarget&&) = delete;
         RenderTarget operator=(const RenderTarget&) = delete;
 
-        void setSize(unsigned int width, unsigned int height, unsigned int depth = 1);
+        void setSize(uint32_t width, uint32_t height, uint32_t depth = 1);
 
         std::shared_ptr<Texture> texture();
 
@@ -71,7 +73,7 @@ namespace mix {
 
         void dispose();
 
-        static std::unique_ptr<RenderTarget> create(unsigned int width, unsigned int height, const Options& options);
+        static std::unique_ptr<RenderTarget> create(uint32_t width, uint32_t height, const Options& options);
 
         ~RenderTarget() override;
 

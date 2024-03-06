@@ -146,7 +146,7 @@ wgpu::Texture* WebGPUTextureUtils::getColorBuffer() {
 	TextureDescriptor textureDes{};
 	textureDes.label = "colorBuffer";
 	textureDes.size = WGPUExtent3D{ width,height,1 };
-	textureDes.sampleCount = backend->parameters.sampleCount;
+	textureDes.sampleCount = backend->parameters.sampleCount.value();
 	textureDes.format = WGPUTextureFormat::WGPUTextureFormat_BGRA8Unorm;
 	textureDes.usage = WGPUTextureUsage::WGPUTextureUsage_RenderAttachment | WGPUTextureUsage::WGPUTextureUsage_CopySrc;
 	colorBuffer = std::make_shared<wgpu::Texture>(backend->device->createTexture(textureDes));
@@ -196,7 +196,7 @@ wgpu::Texture* WebGPUTextureUtils::getDepthBuffer(bool depth, bool stencil) {
 
 	createTexture(depthTexture.get(), options);
 
-	 
+	return static_cast<BackendTextureResourceProperties*>(depthTextureGPU.get())->texture.get();
 }
 
 void WebGPUTextureUtils::createTexture(Texture* texture, WebGPUTextureOptions& options) {
@@ -219,7 +219,7 @@ void WebGPUTextureUtils::createTexture(Texture* texture, WebGPUTextureOptions& o
 	uint32_t depth = options.depth.value();
 	uint32_t levels = options.levels.value();
 
-	auto dimension = _getDimension(texture);
+	WGPUTextureDimension dimension = (WGPUTextureDimension)_getDimension(texture);
 
 	WGPUTextureFormat format = texture->internalFormat.has_value() ? 
 		WGPUTextureFormat(texture->internalFormat.value()) : getFormat(texture, backend->device.get());
@@ -254,6 +254,7 @@ void WebGPUTextureUtils::createTexture(Texture* texture, WebGPUTextureOptions& o
 	textureDescriptorGPU.sampleCount = primarySampleCount;
 	textureDescriptorGPU.format = format;
 	textureDescriptorGPU.usage = usage;
+	textureDescriptorGPU.dimension = dimension;
 
 	if (dynamic_cast<VideoTexture*>(texture)) {
 		std::cerr << "not impl VideoTexture" << std::endl;
@@ -296,13 +297,13 @@ void WebGPUTextureUtils::destroyTexture(void* texture) {
 }
 
 uint32_t WebGPUTextureUtils::_getDimension(Texture* texture) {
-	uint32_t dimension = 0;
-	//if (dynamic_cast<DataTexture3D*>(texture) != nullptr) {
-	//	dimension = GPUTextureDimension.ThreeD;
-	//}
-	//else {
-	//	dimension = GPUTextureDimension.TwoD;
-	//}
+	WGPUTextureDimension dimension;
+	if (dynamic_cast<DataTexture3D*>(texture) != nullptr) {
+		dimension = WGPUTextureDimension_3D;
+	}
+	else {
+		dimension = WGPUTextureDimension_2D;
+	}
 
-	return dimension;
+	return (uint32_t)dimension;
 }

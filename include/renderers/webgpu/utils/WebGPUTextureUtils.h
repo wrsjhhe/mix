@@ -12,7 +12,7 @@ namespace mix {
 	class WebGPUBackend;
 	class DepthTexture;
 	class Texture;
-	class BackendResourceProperties;
+	struct BackendResourceProperties;
 
 	class WebGPUTextureUtils {
 	public:

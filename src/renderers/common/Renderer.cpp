@@ -44,7 +44,7 @@ static Frustum _frustum;
 static Vector3 _vector3;
 static Matrix4 _projScreenMatrix;
 
-Renderer::Renderer(const std::shared_ptr<Backend>& backend, const Parameters& parameters) :backend(backend), parameters(parameters) {}
+Renderer::Renderer(const std::shared_ptr<Backend>& backend, const Parameters& parameters) : parameters(parameters),backend(backend) {}
 
 
 void Renderer::init() {
@@ -98,26 +98,28 @@ void Renderer::render(Scene& scene, Camera& camera) {
 
 	_screen.set(0, 0, _drawingBufferSize.x, _drawingBufferSize.y);
 
-	const unsigned int minDepth = 0;
-	const unsigned int maxDepth = 1;
+	float minDepth = viewport.minDepth.has_value() ? 0 : viewport.minDepth.value();
+	float maxDepth = viewport.maxDepth.has_value() ? 1 : viewport.maxDepth.value();
 
 	renderContext->viewportValue.copy(viewport).multiplyScalar(pixelRatio).floor();
-	int width = renderContext->viewportValue.z;
-	int height = renderContext->viewportValue.w;
+	int width = renderContext->viewportValue.width();
+	int height = renderContext->viewportValue.height();
 	width >>= activeMipmapLevel;
 	height >>= activeMipmapLevel;
-	renderContext->viewportValue.z = width;
-	renderContext->viewportValue.w = height;
+	renderContext->viewportValue.setWidth(width);
+	renderContext->viewportValue.setHeight(height);
+	renderContext->viewportValue.minDepth = minDepth;
+	renderContext->viewportValue.maxDepth = maxDepth;
 	renderContext->viewport = renderContext->viewportValue.equals(_screen) == false;
 
 	renderContext->scissorValue.copy(scissor).multiplyScalar(pixelRatio).floor();
 	renderContext->scissor = _scissorTest && renderContext->scissorValue.equals(_screen) == false;
-	width = renderContext->scissorValue.z;
-	height = renderContext->scissorValue.w;
+	width = renderContext->scissorValue.width();
+	height = renderContext->scissorValue.height();
 	width >>= activeMipmapLevel;
 	height >>= activeMipmapLevel;
-	renderContext->scissorValue.z = width;
-	renderContext->scissorValue.w = height;
+	renderContext->scissorValue.setWidth(width);
+	renderContext->scissorValue.setHeight(height);
 
 	if (renderContext->clippingContext == nullptr) {
 		renderContext->clippingContext = std::make_shared<ClippingContext>();
@@ -216,10 +218,6 @@ void Renderer::_projectObject(Object3D* object, Camera& camera, unsigned int gro
 				renderList->push(object, geometry, object->material(), groupOrder, _vector3.z, nullptr);
 
 			}
-		}
-		else if (objectType == "Scene") {
-			int a = 0;
-			a++;
 		}
 	}
 

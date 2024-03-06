@@ -70,8 +70,6 @@ namespace mix {
 
 		// utils
 		virtual void resolveTimestampAsync() { }
-		virtual void hasFeatureAsync() { } // return Boolean
-		virtual void hasFeature() { } // return Boolean
 		virtual void getInstanceCount() { }
 		virtual Vector2& getDrawingBufferSize();
 		virtual void getScissor() { }

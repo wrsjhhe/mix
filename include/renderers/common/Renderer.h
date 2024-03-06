@@ -10,6 +10,7 @@
 #include <constants.h>
 #include <renderers/common/Info.h>
 #include <renderers/RenderTarget.h>
+#include <optional>
 
 namespace mix {
 	class Backend;
@@ -26,7 +27,7 @@ namespace mix {
 	class Pipelines;
 	class RenderList;
 	class RenderLists;
-	class RenderContext;
+	struct RenderContext;
 	class RenderContexts;
 	class Textures;
 	class Background;
@@ -35,11 +36,10 @@ namespace mix {
 	public:
 		struct Parameters
 		{
-			bool alpha = true;
-			bool antialias = false;
-			bool sampleCount = 1;
-			bool trackTimestamp = true;
-
+			std::optional<bool> alpha;
+			std::optional<bool> antialias;
+			std::optional<uint32_t> sampleCount;
+			std::optional<bool> trackTimestamp; 
 		};
 		Parameters parameters;
 
