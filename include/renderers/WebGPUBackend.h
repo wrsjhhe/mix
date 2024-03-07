@@ -83,7 +83,7 @@ namespace mix {
 		void beginRender(RenderContext* renderContext);
 		void finishRender(RenderContext* renderContext);
 
-		void draw(RenderObject* renderObject,Info& info);
+		void draw(RenderObject* renderObject,Info& info) override;
 
 		virtual bool hasFeature(const wgpu::FeatureName& name );
 	private:

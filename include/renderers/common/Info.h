@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdint.h>
+
 namespace mix {
 
 	struct Info {
@@ -8,20 +10,20 @@ namespace mix {
 
 		struct Render
 		{
-			unsigned int calls = 0;
-			unsigned int drawCalls = 0;
-			unsigned int triangles = 0;
-			unsigned int points = 0;
-			unsigned int lines = 0;
+			uint32_t calls = 0;
+			uint32_t drawCalls = 0;
+			uint32_t triangles = 0;
+			uint32_t points = 0;
+			uint32_t lines = 0;
 		};
 
 		struct Timestamp {
-			unsigned int compute = 0;
-			unsigned int render = 0;
+			uint32_t compute = 0;
+			uint32_t render = 0;
 		};
 
-		unsigned int frame = 0;
-		unsigned int calls = 0;
+		uint32_t frame = 0;
+		uint32_t calls = 0;
 
 		Render render;
 		Timestamp timestamp;

@@ -7,6 +7,8 @@
 
 #include <optional>
 #include <variant>
+#include <cstdint>
+#include <any>
 
 namespace mix {
 
@@ -75,6 +77,10 @@ namespace mix {
 
         unsigned int version = 0;
 
+        void (*onBeforeCompile)() = nullptr;
+
+        std::unordered_map<std::string, std::any> properties;
+         
         Material(const Material&) = delete;
 
         std::string uuid() const;
@@ -101,6 +107,15 @@ namespace mix {
         }
 
         virtual std::shared_ptr<Material> clone() const { return nullptr; };
+
+        std::string customProgramCacheKey() {
+            if (onBeforeCompile == nullptr) {
+                return "";
+            }
+            else {
+                return std::to_string(uint64_t(onBeforeCompile));
+            }
+        }
 
         ~Material() override;
 

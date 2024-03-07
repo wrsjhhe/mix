@@ -11,16 +11,16 @@ namespace mix {
 
 	class ClippingContext {
 	public:
-		unsigned int version = 0;
-		unsigned int globalClippingCount = 0;
+		uint32_t version = 0;
+		uint32_t globalClippingCount = 0;
 
-		unsigned int localClippingCount = 0;
+		uint32_t localClippingCount = 0;
 		bool localClippingEnabled = false;
 		bool localClipIntersection = false;
 
 		std::vector<Vector4> planes;
 
-		unsigned int parentVersion = 0;
+		uint32_t parentVersion = 0;
 
 		Matrix4 viewMatrix;
 

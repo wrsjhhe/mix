@@ -30,7 +30,7 @@ namespace mix {
 		virtual void finish(std::shared_ptr<RenderObject>) {}
 
 		// render object
-		virtual void draw(std::shared_ptr<RenderContext>) {}
+		virtual void draw(RenderObject* renderObject, Info& info) {}
 
 		// program
 		virtual void createProgram() {}

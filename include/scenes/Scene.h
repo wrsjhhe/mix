@@ -11,6 +11,9 @@
 namespace mix {
 
     class Texture;
+    class Node;
+    class EnvironmentNode;
+    class FogNode;
     typedef std::variant<Fog, FogExp2> FogVariant;
 
     class Scene: public Object3D {
@@ -25,6 +28,10 @@ namespace mix {
         std::shared_ptr<Material> overrideMaterial;
 
         bool autoUpdate = true;
+
+        std::shared_ptr<EnvironmentNode> environmentNode = nullptr;
+        std::shared_ptr<Node> backgroundNode = nullptr;
+        std::shared_ptr<FogNode> fogNode = nullptr;
 
         static std::shared_ptr<Scene> create();
     };

@@ -31,6 +31,7 @@ namespace mix {
 	class RenderContexts;
 	class Textures;
 	class Background;
+	class ToneMappingNode;
 
 	class Renderer {
 	public:
@@ -47,6 +48,10 @@ namespace mix {
 
 		std::vector<Plane> clippingPlanes;
 		bool localClippingEnabled = false;
+
+		Info info;
+
+		std::shared_ptr<ToneMappingNode> toneMappingNode = nullptr;
 
 		Renderer(const std::shared_ptr<Backend>& backend, const Parameters& parameters);
 
@@ -83,8 +88,6 @@ namespace mix {
 
 		bool depth = true;
 		bool stencil = true;
-
-		Info info;
 
 		float _pixelRatio = 1;
 		float _width = 0;

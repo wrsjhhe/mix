@@ -155,6 +155,8 @@ set(publicHeaders
 
 	"utils/StringUtils.h"
 	"utils/TypeUtils.h"
+	"utils/WeakMap.h"
+	"utils/ChainMap.h"
 
 )
 set(publicHeadersFull)
