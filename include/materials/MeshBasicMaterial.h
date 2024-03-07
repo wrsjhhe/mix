@@ -14,14 +14,14 @@ namespace mix {
         : public virtual Material,
         public MaterialWithColor,
         public MaterialWithMap,
-        public MaterialWithLightMap,
         public MaterialWithAoMap,
+        public MaterialWithLightMap,
         public MaterialWithSpecularMap,
         public MaterialWithAlphaMap,
         public MaterialWithEnvMap,
+        public MaterialWithCombine,
         public MaterialWithReflectivity,
         public MaterialWithWireframe,
-        public MaterialWithCombine,
         public MaterialWithMorphTargets {
 
     public:

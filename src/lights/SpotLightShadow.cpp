@@ -7,7 +7,7 @@ using namespace mix;
 SpotLightShadow::SpotLightShadow()
     : LightShadow(PerspectiveCamera::create(50, 1, 0.5f, 500)) {}
 
-void SpotLightShadow::updateMatrices(Light* _light) {
+void SpotLightShadow::updateMatrices(Light* _light, size_t) {
 
     auto light = _light->as<SpotLight>();
 

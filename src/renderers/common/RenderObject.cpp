@@ -29,8 +29,6 @@ RenderObject::RenderObject(Nodes* nodes,
 
 	clippingContextVersion = clippingContext->version;
 	initialNodesCacheKey = getNodesCacheKey();
-
-	initialCacheKey = 
 }
 
 void RenderObject::updateClipping(std::shared_ptr<ClippingContext> parent) {

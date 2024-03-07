@@ -11,13 +11,13 @@
 namespace mix {
 
     class Skeleton {
-
+        std::string uuid_;
     public:
         int frame{ -1 };
 
         std::vector<std::shared_ptr<Bone>> bones;
-        std::vector<Matrix4> boneInverses;
         std::vector<float> boneMatrices;
+        std::vector<Matrix4> boneInverses;
 
         std::shared_ptr<DataTexture> boneTexture{ nullptr };
         int boneTextureSize{ 0 };
@@ -44,8 +44,7 @@ namespace mix {
             const std::vector<Matrix4>& boneInverses = {});
 
     private:
-        std::string uuid_;
-
+ 
         Skeleton(const std::vector<std::shared_ptr<Bone>>& bones, const std::vector<Matrix4>& boneInverses);
 
         friend class SkinnedMesh;

@@ -57,7 +57,10 @@ static ParsedSource parse(std::string source) {
                 i++;
 
             // add input
-            res.inputs.emplace_back(NodeFunctionInput(type, name));
+            NodeFunctionInput input{};
+            input.type = type;
+            input.name = name;
+            res.inputs.emplace_back(input);
         }
 
         res.blockCode = source.substr(0, propsMatches[0].size());

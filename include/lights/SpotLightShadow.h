@@ -10,7 +10,7 @@ namespace mix {
     public:
         float focus = 1;
 
-        void updateMatrices(Light* light) override;
+        void updateMatrices(Light* light,size_t) override;
 
         static std::shared_ptr<SpotLightShadow> create();
 

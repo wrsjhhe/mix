@@ -55,8 +55,6 @@ WebGPUBackend::WebGPUBackend(const Renderer::Parameters& parameters ):Backend(pa
 		this->parameters.sampleCount = 1;
 	}
 	this->trackTimestamp = parameters.trackTimestamp == true;
-
-	textureUtils = std::make_shared<WebGPUTextureUtils>(this);
 }
 
 WebGPUBackend::~WebGPUBackend() {
@@ -69,6 +67,12 @@ WebGPUBackend::~WebGPUBackend() {
 
 void WebGPUBackend::init(Renderer* renderer) {
 	Backend::init(renderer);
+
+	textureUtils = std::make_shared<WebGPUTextureUtils>(this);
+	utils = std::make_shared<WebGPUUtils>();
+	attributeUtils = std::make_shared<WebGPUAttributeUtils>();
+	bindingUtilstils = std::make_shared<WebGPUBindingUtils>();
+	pipelineUtils = std::make_shared<WebGPUPipelineUtils>();
 
 	instance = std::make_shared<Instance>(createInstance(InstanceDescriptor{}));
 	if (!instance) {
@@ -103,6 +107,7 @@ void WebGPUBackend::init(Renderer* renderer) {
 	swapChain = std::make_shared<SwapChain>(device->createSwapChain(*surface, swapChainDesc));
 
 	updateSize();
+
 }
 
 
@@ -406,7 +411,7 @@ bool WebGPUBackend::hasFeature(const wgpu::FeatureName& name) {
 
 std::shared_ptr<RenderPassDescriptor> WebGPUBackend::_getDefaultRenderPassDescriptor() {
 	std::shared_ptr<RenderPassDescriptor> descriptor = defaultRenderPassdescriptor;
-	bool antialias = backend->renderer->parameters.antialias.value();
+	bool antialias = this->renderer->parameters.antialias.value();
 
 	if (descriptor == nullptr) {
 		descriptor = std::make_shared<RenderPassDescriptor>();

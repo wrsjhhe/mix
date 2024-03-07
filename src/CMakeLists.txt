@@ -157,7 +157,6 @@ set(publicHeaders
 	"utils/TypeUtils.h"
 	"utils/WeakMap.h"
 	"utils/ChainMap.h"
-
 )
 set(publicHeadersFull)
 foreach (header IN LISTS publicHeaders)

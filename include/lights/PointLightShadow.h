@@ -9,7 +9,7 @@ namespace mix {
     class PointLightShadow: public LightShadow {
 
     public:
-        void updateMatrices(PointLight* light, size_t viewportIndex = 0);
+        virtual void updateMatrices(Light* light, size_t viewportIndex = 0) override;
 
         static std::shared_ptr<PointLightShadow> create();
 

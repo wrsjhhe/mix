@@ -38,7 +38,7 @@ namespace mix {
 
         [[nodiscard]] const Frustum& getFrustum() const;
 
-        virtual void updateMatrices(Light* light);
+        virtual void updateMatrices(Light* light, size_t viewportIndex = 0);
 
         Vector4& getViewport(size_t viewportIndex);
 

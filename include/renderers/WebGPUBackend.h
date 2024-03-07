@@ -99,23 +99,21 @@ namespace mix {
 
 		void prepareTimestampBuffer(RenderContext* renderContext,wgpu::CommandEncoder* encoder);
 	private:
-		WebGPUBackend* backend;
-
-		std::shared_ptr<wgpu::Instance> instance = nullptr;
-		std::shared_ptr <wgpu::Surface> surface = nullptr;
-		std::shared_ptr <wgpu::Adapter> adapter = nullptr;
-		std::shared_ptr <wgpu::Device> device = nullptr;
-		std::shared_ptr <wgpu::SwapChain> swapChain = nullptr;
+		std::shared_ptr<wgpu::Instance> instance;
+		std::shared_ptr <wgpu::Surface> surface;
+		std::shared_ptr <wgpu::Adapter> adapter;
+		std::shared_ptr <wgpu::Device> device;
+		std::shared_ptr <wgpu::SwapChain> swapChain;
 		std::shared_ptr<wgpu::RenderPassDescriptor> defaultRenderPassdescriptor;
 
 		wgpu::Texture* colorBuffer;
 
 		bool trackTimestamp = false;
 
-		std::shared_ptr<WebGPUUtils> utils = std::make_shared<WebGPUUtils>();
-		std::shared_ptr<WebGPUAttributeUtils> attributeUtils = std::make_shared<WebGPUAttributeUtils>();
-		std::shared_ptr<WebGPUBindingUtils> ubindingUtilstils = std::make_shared<WebGPUBindingUtils>();
-		std::shared_ptr<WebGPUPipelineUtils> pipelineUtils = std::make_shared<WebGPUPipelineUtils>();
+		std::shared_ptr<WebGPUUtils> utils;
+		std::shared_ptr<WebGPUAttributeUtils> attributeUtils;
+		std::shared_ptr<WebGPUBindingUtils> bindingUtilstils;
+		std::shared_ptr<WebGPUPipelineUtils> pipelineUtils;
 		std::shared_ptr<WebGPUTextureUtils> textureUtils = nullptr;
 		//occludedResolveCache
 

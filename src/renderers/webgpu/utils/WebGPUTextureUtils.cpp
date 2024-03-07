@@ -147,6 +147,8 @@ wgpu::Texture* WebGPUTextureUtils::getColorBuffer() {
 	textureDes.label = "colorBuffer";
 	textureDes.size = WGPUExtent3D{ width,height,1 };
 	textureDes.sampleCount = backend->parameters.sampleCount.value();
+	textureDes.dimension = TextureDimension::_2D;
+	textureDes.mipLevelCount = 1;
 	textureDes.format = WGPUTextureFormat::WGPUTextureFormat_BGRA8Unorm;
 	textureDes.usage = WGPUTextureUsage::WGPUTextureUsage_RenderAttachment | WGPUTextureUsage::WGPUTextureUsage_CopySrc;
 	colorBuffer = std::make_shared<wgpu::Texture>(backend->device->createTexture(textureDes));

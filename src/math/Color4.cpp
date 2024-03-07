@@ -15,6 +15,8 @@ Color4& Color4::Color4::set(float r, float g, float b, float a /*= 1*/)
 	this->g = g;
 	this->b = b;
 	this->a = a;
+
+	return *this;
 }
 
 Color4& Color4::Color4::copy(const Color4& color)
@@ -23,6 +25,8 @@ Color4& Color4::Color4::copy(const Color4& color)
 	this->g = color.g;
 	this->b = color.b;
 	this->a = color.a;
+	return *this;
+
 }
 
 Color4 Color4::Color4::clone()

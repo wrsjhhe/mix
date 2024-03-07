@@ -21,7 +21,7 @@ const Frustum& LightShadow::getFrustum() const {
     return this->_frustum;
 }
 
-void LightShadow::updateMatrices(Light* light) {
+void LightShadow::updateMatrices(Light* light, size_t viewportIndex) {
 
     auto& shadowCamera = this->camera;
     auto& shadowMatrix = this->matrix;
