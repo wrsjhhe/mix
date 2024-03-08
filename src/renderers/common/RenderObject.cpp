@@ -3,32 +3,42 @@
 #include <renderers/common/Geometries.h>
 #include <renderers/common/Renderer.h>
 #include <renderers/common/RenderContext.h>
+#include <renderers/common/Bindings.h>
 #include <core/Object3D.h>
 #include <materials/Material.h>
 #include <scenes/Scene.h>
 #include <cameras/Camera.h>
-#include <nodes/lighting/LightNode.h>
+#include <nodes/lighting/LightsNode.h>
 #include <renderers/common/ClippingContext.h>
 
 using namespace mix;
 
 static uint32_t _id = 0;
 
+void RenderObject::OnMaterialDispose::onEvent(Event& event) {
+	scope_->dispose();
+}
+
 RenderObject::RenderObject(Nodes* nodes,
 	Geometries* geometries,
 	Renderer* renderer, Object3D* object,
 	Material* material,
-	Scene* scene, Camera* camera, LightNode* lightsNode,
+	Scene* scene, Camera* camera, LightsNode* lightsNode,
 	RenderContext* renderContext): id(_id++),
 	_nodes(nodes),_geometries(geometries),renderer(renderer),object(object), material(material),
-	scene(scene),camera(camera),lightsNode(lightsNode),renderContext(renderContext)
+	scene(scene),camera(camera),lightsNode(lightsNode),geometry(object->geometry()), context(renderContext), onMaterialDispose(this)
 {
 	version = material->version;
 
 	updateClipping(renderContext->clippingContext);
 
 	clippingContextVersion = clippingContext->version;
+
 	initialNodesCacheKey = getNodesCacheKey();
+	initialCacheKey = getCacheKey();
+
+
+	material->addEventListener("dispose", &onMaterialDispose);
 }
 
 void RenderObject::updateClipping(std::shared_ptr<ClippingContext> parent) {
@@ -45,10 +55,27 @@ std::string RenderObject::getNodesCacheKey() {
 }
 
 std::string RenderObject::getCacheKey() {
-	
+	return getMaterialCacheKey() + "," + getNodesCacheKey();
 }
 std::string RenderObject::getMaterialCacheKey() {
 	std::string cacheKey = material->customProgramCacheKey();
 
-	
+	//todo Material key by property
+	return material->uuid();
+}
+
+void RenderObject::getNodeBuilderState() {
+	_nodes->getForRender(this);
+}
+
+Bindings* RenderObject::getBindings() {
+	if (_bindings != nullptr) return _bindings.get();
+	else {
+
+	}
+}
+
+void RenderObject::dispose() {
+	material->removeEventListener("dispose", &onMaterialDispose);
+
 }

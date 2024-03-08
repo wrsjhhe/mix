@@ -13,7 +13,7 @@
 #include <optional>
 
 namespace mix {
-	class Backend;
+	class WebGPUBackend;
 	class Object3D;
 	class Scene;
 	class Camera;
@@ -53,7 +53,7 @@ namespace mix {
 
 		std::shared_ptr<ToneMappingNode> toneMappingNode = nullptr;
 
-		Renderer(const std::shared_ptr<Backend>& backend, const Parameters& parameters);
+		Renderer(const std::shared_ptr<WebGPUBackend>& backend, const Parameters& parameters);
 
 		void init();
 
@@ -68,7 +68,7 @@ namespace mix {
 		bool _initialized = false;
 
 		Renderer* renderer = nullptr;
-		std::shared_ptr<Backend> backend = nullptr;
+		std::shared_ptr<WebGPUBackend> backend = nullptr;
 
 		bool logarithmicDepthBuffer = false;
 

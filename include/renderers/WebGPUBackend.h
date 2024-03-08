@@ -1,6 +1,11 @@
 #pragma once
-#include <renderers/common/Backend.h>
+
 #include <unordered_set>
+#include <unordered_map>
+#include <memory>
+#include <canvas/Canvas.h>
+#include <renderers/common/Renderer.h>
+
 
 namespace wgpu {
 	class Instance;
@@ -27,6 +32,12 @@ namespace mix {
 	class WebGPUTextureUtils;
 	struct RenderContext;
 	class RenderObject;
+	class WGSLNodeBuilder;
+
+	struct BackendResourceProperties
+	{
+
+	};
 
 	struct BackendTextureResourceProperties : public BackendResourceProperties
 	{
@@ -70,22 +81,33 @@ namespace mix {
 		uint32_t samples;
 	};
 
-	class WebGPUBackend : public Backend{
+	class WebGPUBackend{
 	public:
 		WebGPUBackend(const Renderer::Parameters& parameters = { });
 
-		virtual ~WebGPUBackend();
+		~WebGPUBackend();
 
-		virtual void init( Renderer* renderer) override;
+		void init(Renderer* renderer);
 
-		virtual void updateSize() override;
+		void updateSize();
 
 		void beginRender(RenderContext* renderContext);
 		void finishRender(RenderContext* renderContext);
 
-		void draw(RenderObject* renderObject,Info& info) override;
+		void draw(RenderObject* renderObject,Info& info);
 
-		virtual bool hasFeature(const wgpu::FeatureName& name );
+		bool hasFeature(const wgpu::FeatureName& name );
+
+		std::shared_ptr<WGSLNodeBuilder> createNodeBuilder(Object3D* object,Renderer* renderer,Scene* scene = nullptr);
+
+		Canvas* getDomElement();
+
+		Vector2& getDrawingBufferSize();
+
+		void set(void*, const std::shared_ptr<BackendResourceProperties>&);
+		std::shared_ptr<BackendResourceProperties> get(void*);
+		bool has(void*);
+		void remove(void*);
 	private:
 		std::shared_ptr<wgpu::RenderPassDescriptor> _getDefaultRenderPassDescriptor();
 
@@ -99,6 +121,13 @@ namespace mix {
 
 		void prepareTimestampBuffer(RenderContext* renderContext,wgpu::CommandEncoder* encoder);
 	private:
+		Renderer::Parameters parameters;
+		//std::unordered_map<x, x> data;
+
+		Renderer* renderer;
+
+		std::unordered_map<void*, std::shared_ptr<BackendResourceProperties>> data;
+
 		std::shared_ptr<wgpu::Instance> instance;
 		std::shared_ptr <wgpu::Surface> surface;
 		std::shared_ptr <wgpu::Adapter> adapter;

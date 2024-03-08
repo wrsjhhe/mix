@@ -1,7 +1,10 @@
 #include <renderers/common/nodes/Nodes.h>
 #include <renderers/common/Renderer.h>
-#include <renderers/common/Backend.h>
+#include <renderers/WebGPUBackend.h>
+#include <renderers/common/RenderObject.h>
+#include <renderers/webgpu/nodes/WGSLNodeBuilder.h>
 #include <nodes/core/NodeFrame.h>
+#include <nodes/lighting/LightsNode.h>
 #include <nodes/lighting/EnvironmentNode.h>
 #include <nodes/fog/FogNode.h>
 #include <nodes/display/ToneMappingNode.h>
@@ -11,13 +14,13 @@
 
 using namespace mix;
 
-Nodes::Nodes(Renderer* renderer, Backend* backend)
+Nodes::Nodes(Renderer* renderer, WebGPUBackend* backend)
 	: renderer(renderer), backend(backend)
 {
 	nodeFrame = std::make_shared<NodeFrame>();
 }
 
-const std::string& Nodes::getCacheKey(Scene* scene, LightNode* lightsNode) {
+const std::string& Nodes::getCacheKey(Scene* scene, LightsNode* lightsNode) {
 	std::vector<void*> chain{ scene ,lightsNode };
 	uint32_t callId = renderer->info.calls;
 
@@ -77,4 +80,30 @@ ToneMappingNode* Nodes::getToneMappingNode() {
 	}
 	return nullptr;
 
+}
+
+const std::string& Nodes::getForRenderCacheKey(RenderObject* renderObject) {
+	return renderObject->initialCacheKey;
+}
+
+void Nodes::getForRender(RenderObject* renderObject) {
+	RenderObjectData* renderObjectData = reinterpret_cast<RenderObjectData*>(get(renderObject));
+	
+	std::shared_ptr<NodeBuilderState>& nodeBuilderState = renderObjectData->nodeBuilderState;
+	if (nodeBuilderState == nullptr) {
+		const std::string& cacheKey = getForRenderCacheKey(renderObject);
+		
+		auto iter = nodeBuilderCache.find(cacheKey);
+		if (iter == nodeBuilderCache.end()) {
+			std::shared_ptr<WGSLNodeBuilder> nodeBuilder = backend->createNodeBuilder(renderObject->object,renderer, renderObject->scene);
+			nodeBuilder->material = renderObject->material;
+			nodeBuilder->context.material = renderObject->material;
+			nodeBuilder->lightsNode = renderObject->lightsNode;
+			nodeBuilder->environmentNode = getEnvironmentNode(renderObject->scene);
+			nodeBuilder->fogNode = getFogNode(renderObject->scene);
+			nodeBuilder->toneMappingNode = getToneMappingNode();
+			nodeBuilder->clippingContext = renderObject->clippingContext.get();
+			nodeBuilder->build();
+		}
+	}
 }

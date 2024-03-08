@@ -6,13 +6,16 @@
 
 namespace mix {
 	class Renderer;
-	class Backend;
+	class WebGPUBackend;
 	class NodeFrame;
 	class Scene;
-	class LightNode;
+	class LightsNode;
 	class EnvironmentNode;
 	class FogNode;
 	class ToneMappingNode;
+	class RenderObject;
+	class NodeBuilderState;
+
 	class Nodes : public DataMap {
 	public:
 		struct CacheKeyData
@@ -21,27 +24,37 @@ namespace mix {
 			std::string cacheKey;
 		};
 
+		struct RenderObjectData
+		{
+			std::shared_ptr<NodeBuilderState> nodeBuilderState;
+		};
+
 	public:
 		Nodes() = delete;
-		Nodes(Renderer* renderer, Backend* backend);
+		Nodes(Renderer* renderer, WebGPUBackend* backend);
 
 
 		std::shared_ptr<NodeFrame> nodeFrame;
 
-		const std::string& getCacheKey(Scene* scene,LightNode* lightsNode);
+		const std::string& getCacheKey(Scene* scene, LightsNode* lightsNode);
 
 		EnvironmentNode* getEnvironmentNode(Scene* scene);
 
 		FogNode* getFogNode(Scene* scene);
 
 		ToneMappingNode* getToneMappingNode();
+
+		const std::string& getForRenderCacheKey(RenderObject* renderObject);
+
+		void getForRender(RenderObject* renderObject);
 	protected:
 		bool isToneMappingState = false;
 
 	private:
 		Renderer* renderer;
-		Backend* backend;
+		WebGPUBackend* backend;
 
 		ChainMap callHashCache;
+		std::unordered_map<std::string, NodeBuilderState*> nodeBuilderCache;
 	};
 }

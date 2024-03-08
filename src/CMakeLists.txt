@@ -16,8 +16,10 @@ set(publicHeaders
 	"nodes/core/NodeCache.h"
 	"nodes/core/NodeUtils.h"
 	"nodes/core/Node.h"
+	"nodes/core/NodeAttribute.h"
 	"nodes/core/TempNode.h"
 	"nodes/core/NodeFrame.h"
+	"nodes/core/NodeKeywords.h"
 	"nodes/materials/NodeMaterial.h"
 	"nodes/lighting/LightNode.h"
 	"nodes/lighting/LightsNode.h"
@@ -47,14 +49,16 @@ set(publicHeaders
     "input/PeripheralsEventSource.h"
 
 	"renderers/common/nodes/Nodes.h"
+	"renderers/common/nodes/NodeBuilderState.h"
+
 	"renderers/common/Info.h"
-	"renderers/common/Backend.h"
 	"renderers/common/Renderer.h"
 	"renderers/common/Attributes.h"
 	"renderers/common/Geometries.h"
 	"renderers/common/Animation.h"
 	"renderers/common/Background.h"
 	"renderers/common/Textures.h"
+	"renderers/common/Pipeline.h"
 	"renderers/common/Pipelines.h"
 	"renderers/common/Bindings.h"
 	"renderers/common/RenderObject.h"
@@ -70,8 +74,10 @@ set(publicHeaders
 	"renderers/webgpu/utils/WebGPUBindingUtils.h"
 	"renderers/webgpu/utils/WebGPUPipelineUtils.h"
 	"renderers/webgpu/utils/WebGPUTextureUtils.h"
+
 	"renderers/webgpu/nodes/WGSLNodeFunction.h"
 	"renderers/webgpu/nodes/WGSLNodeParser.h"
+	"renderers/webgpu/nodes/WGSLNodeBuilder.h"
 
 	"renderers/WebGPUBackend.h"
 	"renderers/WebGPURenderer.h"
@@ -87,6 +93,7 @@ set(publicHeaders
 	"materials/LineBasicMaterial.h"
 	"materials/PointsMaterial.h"
 	"materials/MeshBasicMaterial.h"
+	"materials/ShaderMaterial.h"
 
 	"objects/ObjectWithMorphTargetInfluences.h"
 	"objects/Group.h"
@@ -172,6 +179,7 @@ set(sources
 		"nodes/core/Node.cpp"
 		"nodes/core/TempNode.cpp"
 		"nodes/core/NodeFrame.cpp"
+		"nodes/core/NodeKeywords.cpp"
 		"nodes/materials/NodeMaterial.cpp"
 		"nodes/lighting/LightNode.cpp"
 		"nodes/lighting/LightsNode.cpp"
@@ -191,8 +199,9 @@ set(sources
 		"input/PeripheralsEventSource.cpp"
 
 		"renderers/common/nodes/Nodes.cpp"
+		"renderers/common/nodes/NodeBuilderState.cpp"
+
 		"renderers/common/Info.cpp"
-		"renderers/common/Backend.cpp"
 		"renderers/common/Renderer.cpp"
 		"renderers/common/Attributes.cpp"
 		"renderers/common/Geometries.cpp"
@@ -214,7 +223,9 @@ set(sources
 		"renderers/webgpu/utils/WebGPUBindingUtils.cpp"
 		"renderers/webgpu/utils/WebGPUPipelineUtils.cpp"
 		"renderers/webgpu/utils/WebGPUTextureUtils.cpp"
+
 		"renderers/webgpu/nodes/WGSLNodeFunction.cpp"
+		"renderers/webgpu/nodes/WGSLNodeBuilder.cpp"
 
 		"renderers/WebGPUBackend.cpp"
 		"renderers/WebGPURenderer.cpp"
@@ -229,6 +240,7 @@ set(sources
 		"materials/LineBasicMaterial.cpp"
 		"materials/PointsMaterial.cpp"
 		"materials/MeshBasicMaterial.cpp"
+		"materials/ShaderMaterial.cpp"
 
 		"objects/Group.cpp"
 		"objects/Mesh.cpp"

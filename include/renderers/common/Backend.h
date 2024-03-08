@@ -9,11 +9,6 @@ namespace mix {
 	struct RenderContext;
 	class RenderObject;
 
-	struct BackendResourceProperties
-	{
-
-	};
-
 	class Backend {
 	public:
 

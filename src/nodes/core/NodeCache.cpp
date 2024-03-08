@@ -9,9 +9,13 @@ NodeCache::NodeCache():id(_id++){
 }
 
 NodeData* NodeCache::getNodeData(Node* node) {
-	return nodesData[node].get();
+	auto iter = nodesData.find(node);
+	if (iter != nodesData.end()) {
+		return iter->second.get();
+	}
+	return nullptr;
 }
 
-void NodeCache::setNodeData(Node* node, std::shared_ptr<NodeData>& data) {
+void NodeCache::setNodeData(Node* node,const std::shared_ptr<NodeData>& data) {
 	nodesData[node] = data;
 }

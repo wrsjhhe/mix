@@ -1,5 +1,6 @@
 #include <nodes/core/Node.h>
 #include <nodes/core/NodeUtils.h>
+#include <nodes/core/NodeBuilder.h>
 
 static unsigned int _nodeId = 0;
 
@@ -25,6 +26,15 @@ void Node::traverse(NodeTraverseCallback callback) {
 }
 
 
-NodeUpdateType Node::getNodeType() {
+const std::string& Node::getNodeType(NodeBuilder* builder) {
+	auto& nodeProperties = builder->getNodeProperties(this);
+	if (nodeProperties.outputNode) {
+		return nodeProperties.outputNode->getNodeType(builder);
+	}
+
+	return nodeType;
+}
+
+void Node::build(NodeBuilder* builder, void* output) {
 
 }

@@ -4,6 +4,8 @@
 #include <vector>
 #include <unordered_map>
 #include <memory>
+#include <nodes/core/NodeKeywords.h>
+#include <nodes/core/NodeCache.h>
 
 namespace mix {
 	class Object3D;
@@ -33,10 +35,10 @@ namespace mix {
 			uint32_t fragment = 0;
 			uint32_t compute = 0;
 		};
-	protected:
+
 		Object3D* object = nullptr;
 		Renderer* renderer = nullptr;
-		NodeParser* parser = nullptr;
+		std::shared_ptr<NodeParser> parser = nullptr;
 		Scene* scene = nullptr;
 		Material* material = nullptr;
 
@@ -63,6 +65,15 @@ namespace mix {
 		ShaderContainer bindings;
 
 		BindingsOffset bindingsOffset;
+
+		struct Context
+		{
+			NodeKeywords keywords;
+			Material* material;
+		};
+
+		Context context;
+
 		/*this.bindingsArray = null;
 		this.attributes = [];
 		this.bufferAttributes = [];
@@ -77,23 +88,15 @@ namespace mix {
 
 		this.currentFunctionNode = null;
 
-		this.context = {
-			keywords: new NodeKeywords(),
-			material : this.material
-		};
-
-		this.cache = new NodeCache();
-		this.globalCache = this.cache;
-
 		this.flowsData = new WeakMap();
 
-		this.shaderStage = null;
 		this.buildStage = null;*/
+		std::string shaderStage;
 		std::shared_ptr<NodeCache> cache;
 		NodeCache* globalCache;
 
 	public:
-		NodeBuilder(Object3D* object,Renderer* renderer, NodeParser* parser, Scene* scene = nullptr,Material* material = nullptr);
+		NodeBuilder(Object3D* object,Renderer* renderer, std::shared_ptr<NodeParser> parser, Scene* scene = nullptr,Material* material = nullptr);
 
 		template <typename T>
 		std::string getTypeFromArray(std::vector<T> array) {
@@ -123,5 +126,19 @@ namespace mix {
 			}
 			
 		}
+
+		void setCache(const std::shared_ptr<NodeCache>& cache) {
+			this->cache = cache;
+		}
+		std::shared_ptr<NodeCache> getCache() {
+			return cache;
+		}
+		virtual bool isAvailable(const std::string& name) { return false; }
+
+		NodeStageDataProperties& getNodeProperties(Node* node,const std::string& shaderStage = "any");
+
+		NodeStageData& getDataFromNode(Node* node, std::string shaderStage = "",NodeCache* cache = nullptr);
+
+		void build(bool convertMaterial = true);
 	};
 }

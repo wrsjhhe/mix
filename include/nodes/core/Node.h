@@ -10,6 +10,8 @@
 namespace mix {
 	typedef std::function<void(Node*)> NodeTraverseCallback;
 
+	class NodeBuilder;
+
 	class Node : public EventDispatcher, public IContainNodes {
 	public:
 		unsigned int id;
@@ -40,6 +42,8 @@ namespace mix {
 
 		NodeUpdateType getUpdateBeforeType() { return updateBeforeType; }
 
-		NodeUpdateType getNodeType();
+		const std::string& getNodeType(NodeBuilder* builder);
+
+		virtual void build(NodeBuilder* builder,void* output = nullptr);
 	};
 }

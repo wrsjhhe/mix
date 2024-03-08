@@ -3,7 +3,6 @@
 #include <math/Frustum.h>
 
 #include <renderers/common/Info.h>
-#include <renderers/common/Backend.h>
 #include <renderers/common/Attributes.h>
 #include <renderers/common/Geometries.h>
 #include <renderers/common/nodes/Nodes.h>
@@ -17,6 +16,7 @@
 #include <renderers/common/RenderContexts.h>
 #include <renderers/common/RenderContext.h>
 
+#include <renderers/WebGPUBackend.h>
 #include <renderers/RenderTarget.h>
 
 #include <nodes/core/NodeFrame.h>
@@ -44,7 +44,7 @@ static Frustum _frustum;
 static Vector3 _vector3;
 static Matrix4 _projScreenMatrix;
 
-Renderer::Renderer(const std::shared_ptr<Backend>& backend, const Parameters& parameters) : parameters(parameters),backend(backend) {}
+Renderer::Renderer(const std::shared_ptr<WebGPUBackend>& backend, const Parameters& parameters) : parameters(parameters),backend(backend) {}
 
 
 void Renderer::init() {

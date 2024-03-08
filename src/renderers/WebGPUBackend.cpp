@@ -8,6 +8,8 @@
 #include <canvas/Canvas.h>
 #include <renderers/common/RenderContext.h>
 #include <renderers/common/RenderObject.h>
+#include <renderers/common/Pipeline.h>
+#include <renderers/webgpu/nodes/WGSLNodeBuilder.h>
 
 #define WEBGPU_CPP_IMPLEMENTATION
 #include <webgpu/webgpu.hpp>
@@ -16,6 +18,7 @@
 using namespace mix;
 using namespace wgpu;
 
+static Vector2 vector2;
 
 static TextureViewDescriptor _defaultColorTextureViewDescriptor() {
 	TextureViewDescriptor descriptor;
@@ -42,7 +45,7 @@ static TextureViewDescriptor _defaultDepthStencilTextureViewDescriptor() {
 }
 
 
-WebGPUBackend::WebGPUBackend(const Renderer::Parameters& parameters ):Backend(parameters) {
+WebGPUBackend::WebGPUBackend(const Renderer::Parameters& parameters ):parameters(parameters) {
 
 	// some parameters require default values other than "undefined"
 	this->parameters.alpha = (!parameters.alpha.has_value()) ? true : parameters.alpha;
@@ -66,7 +69,7 @@ WebGPUBackend::~WebGPUBackend() {
 }
 
 void WebGPUBackend::init(Renderer* renderer) {
-	Backend::init(renderer);
+	renderer = renderer;
 
 	textureUtils = std::make_shared<WebGPUTextureUtils>(this);
 	utils = std::make_shared<WebGPUUtils>();
@@ -314,7 +317,19 @@ void WebGPUBackend::finishRender(RenderContext* renderContext) {
 }
 
 void WebGPUBackend::draw(RenderObject* renderObject, Info& info) {
+	Object3D* object = renderObject->object;
+	BufferGeometry* geometry = renderObject->geometry;
+	RenderContext* renderContext = renderObject->context;
+	Pipeline* pipeline = renderObject->pipeline;
+
+	//auto bindingsData = get(renderObject->getBindings());
+	//auto contextData = get(context);
+	//auto pipelineGPU = get(pipeline).pipeline;
+	//auto currentSets = contextData.currentSets;
+
+	// pipeline
 	
+
 }
 
 void WebGPUBackend::resolveOccludedAsync(RenderContext* renderContext) {
@@ -407,6 +422,10 @@ void WebGPUBackend::initTimestampQuery(RenderContext* renderContext, wgpu::Rende
 
 bool WebGPUBackend::hasFeature(const wgpu::FeatureName& name) {
 	return adapter->hasFeature(name);
+}
+
+std::shared_ptr<WGSLNodeBuilder> WebGPUBackend::createNodeBuilder(Object3D* object, Renderer* renderer, Scene* scene) {
+	return std::make_shared<WGSLNodeBuilder>(object, renderer, scene);
 }
 
 std::shared_ptr<RenderPassDescriptor> WebGPUBackend::_getDefaultRenderPassDescriptor() {
@@ -543,4 +562,38 @@ std::shared_ptr<RenderPassDescriptor> WebGPUBackend::_getRenderPassDescriptor(Re
 	}
 
 	return descriptor;
+}
+
+Canvas* WebGPUBackend::getDomElement() {
+	return renderer->domElement;
+}
+
+Vector2& WebGPUBackend::getDrawingBufferSize() {
+	return renderer->getDrawingBufferSize(vector2);
+}
+
+
+void WebGPUBackend::set(void* object, const std::shared_ptr<BackendResourceProperties>& value) {
+	data[object] = value;
+}
+
+std::shared_ptr<BackendResourceProperties> WebGPUBackend::get(void* object) {
+	auto iter = data.find(object);
+	if (iter != data.end()) {
+		return iter->second;
+	}
+
+	return nullptr;
+}
+
+bool WebGPUBackend::has(void* object) {
+	auto iter = data.find(object);
+	return iter != data.end();
+}
+
+void WebGPUBackend::remove(void* object) {
+	auto iter = data.find(object);
+	if (iter != data.end()) {
+		data.erase(iter);
+	}
 }
