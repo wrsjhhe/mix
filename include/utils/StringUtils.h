@@ -33,13 +33,13 @@ namespace mix::utils {
 	}
 
 	template<class ArrayLike>
-	inline std::string join(const ArrayLike& v, char c = '\n') {
+	inline std::string join(const ArrayLike& v, const char* c = nullptr) {
 
 		auto p = v.cbegin();
 		std::stringstream ss;
 		for (unsigned i = 0; i < v.size(); ++i) {
 			ss << *p;
-			if (i != v.size() - 1) ss << c;
+			if (i != v.size() - 1 && c != nullptr) ss << c;
 			++p;
 		}
 		return ss.str();

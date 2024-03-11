@@ -9,6 +9,7 @@
 #include <nodes/materials/NodeMaterial.h>
 #include <unordered_map>
 #include <string>
+#include <regex>
 
 using namespace mix;
 
@@ -58,8 +59,35 @@ void NodeBuilder::build(bool convertMaterial) {
 			NodeMaterial::fromMaterial(material)->build(this);
 		}
 		else {
-			this.addFlow('compute', object);
+			this.addFlow("compute", object);
 		}
 
 	}
+}
+
+uint32_t NodeBuilder::getTypeLength(const std::string& type) {
+	auto vecType = getVectorType(type);
+
+	static std::regex regExp(R"(vec([2-4]))", std::regex_constants::icase);
+	auto strIter = std::sregex_iterator(type.begin(), type.end(), regExp);
+	if (strIter->size() == 2) {
+		auto iter = strIter->begin();
+		++iter;
+		return std::atoi(iter->str().c_str());
+	}
+	
+	if (vecType == "float" || vecType == "bool" || vecType == "int" || vecType == "uint") return 1;
+
+	if (type.find("mat2") != std::string::npos) return 4;
+	if (type.find("mat3") != std::string::npos) return 9;
+	if (type.find("mat4") != std::string::npos) return 16;
+
+	return 0;
+}
+
+std::string getVectorType(std::string type) {
+	if (type == "color") return "vec3";
+	if (type == "texture" || type == "cubeTexture" || type == "storageTexture") return "vec4";
+
+	return type;
 }

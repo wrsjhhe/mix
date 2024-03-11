@@ -2,6 +2,7 @@
 #include <map>
 #include <memory>
 #include <renderers/common/RenderList.h>
+#include <utils/ChainMap.h>
 
 namespace mix {
 	class Scene;
@@ -13,6 +14,6 @@ namespace mix {
 
 		void dispose();
 	private:
-		std::map<std::pair<const Scene*, const Camera*>, std::shared_ptr<RenderList>> lists;
+		ChainMap lists;
 	};
 }

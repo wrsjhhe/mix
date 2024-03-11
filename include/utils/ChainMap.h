@@ -99,6 +99,9 @@ namespace mix {
             children.erase(iter);
         }
 
+        void clear() {
+            root = std::make_shared<Node>();
+        }
 
     private:
         std::shared_ptr<Node> root = std::make_shared<Node>();
