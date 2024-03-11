@@ -9,7 +9,9 @@
 using namespace mix;
 
 Material::Material()
-    : uuid_(math::generateUUID()) {}
+    : uuid_(math::generateUUID()) {
+    setDefaultValues();
+}
 
 std::string Material::uuid() const {
 
@@ -101,6 +103,44 @@ void Material::copyInto(Material* m) const {
 Material::~Material() {
 
     dispose();
+}
+
+void Material::setDefaultValues() {
+    values["fog"] = fog;
+    values["blending"] = blending;
+    values["side"] = side;
+    values["vertexColors"] = vertexColors;
+    values["opacity"] = opacity;
+    values["transparent"] = transparent;
+    values["blendSrc"] = blendSrc;
+    values["blendDst"] = blendDst;
+    values["blendEquation"] = blendEquation;
+    values["blendSrcAlpha"] = blendSrcAlpha;
+    values["blendDstAlpha"] = blendDstAlpha;
+    values["blendEquationAlpha"] = blendEquationAlpha;
+    values["depthFunc"] = depthFunc;
+    values["depthTest"] = depthTest;
+    values["depthWrite"] = depthWrite;
+    values["stencilWriteMask"] = stencilWriteMask;
+    values["stencilFunc"] = stencilFunc;
+    values["stencilRef"] = stencilRef;
+    values["stencilFuncMask"] = stencilFuncMask;
+    values["stencilFail"] = stencilFail;
+    values["stencilZFail"] = stencilZFail;
+    values["stencilZPass"] = stencilZPass;
+    values["stencilWrite"] = stencilWrite;
+    values["shadowSide"] = shadowSide;
+    values["colorWrite"] = colorWrite;
+    values["polygonOffset"] = polygonOffset;
+    values["polygonOffsetFactor"] = polygonOffsetFactor;
+    values["polygonOffsetUnits"] = polygonOffsetUnits;
+    values["dithering"] = dithering;
+    values["alphaTest"] = alphaTest;
+    values["alphaToCoverage"] = alphaToCoverage;
+    values["premultipliedAlpha"] = premultipliedAlpha;
+    values["visible"] = visible;
+    values["toneMapped"] = toneMapped;
+ 
 }
 
 void Material::setValues(const std::unordered_map<std::string, MaterialValue>& values) {

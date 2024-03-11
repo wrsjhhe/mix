@@ -59,7 +59,7 @@ void NodeBuilder::build(bool convertMaterial) {
 			NodeMaterial::fromMaterial(material)->build(this);
 		}
 		else {
-			this.addFlow("compute", object);
+			//addFlow("compute", object);
 		}
 
 	}
@@ -85,7 +85,7 @@ uint32_t NodeBuilder::getTypeLength(const std::string& type) {
 	return 0;
 }
 
-std::string getVectorType(std::string type) {
+std::string NodeBuilder::getVectorType(std::string type) {
 	if (type == "color") return "vec3";
 	if (type == "texture" || type == "cubeTexture" || type == "storageTexture") return "vec4";
 

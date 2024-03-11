@@ -9,7 +9,9 @@ MeshBasicMaterial::MeshBasicMaterial()
     MaterialWithLightMap(1),
     MaterialWithCombine(CombineOperation::Multiply),
     MaterialWithReflectivity(1, 0.98f),
-    MaterialWithWireframe(false, 1) {}
+    MaterialWithWireframe(false, 1) {
+    setDefaultValues();
+}
 
 
 std::string MeshBasicMaterial::type() const {
@@ -55,8 +57,28 @@ std::shared_ptr<MeshBasicMaterial> MeshBasicMaterial::create(const std::unordere
     return m;
 }
 
+void MeshBasicMaterial::setDefaultValues() {
+    values["color"] = color;
+    values["wireframe"] = wireframe;
+    values["wireframeLinewidth"] = wireframeLinewidth;
+    values["map"] = map;
+    values["alphaMap"] = alphaMap;
+    values["specularMap"] = specularMap;
+    values["aoMap"] = aoMap;
+    values["aoMapIntensity"] = aoMapIntensity;
+    values["lightMap"] = lightMap;
+    values["lightMapIntensity"] = lightMapIntensity;
+    values["envMap"] = envMap;
+    values["combine"] = combine;
+    values["reflectivity"] = reflectivity;
+    values["refractionRatio"] = refractionRatio;
+}
 
 bool MeshBasicMaterial::setValue(const std::string& key, const MaterialValue& value) {
+
+    if (Material::setValue(key, value)) {
+        return true;
+    }
 
     if (key == "color") {
 

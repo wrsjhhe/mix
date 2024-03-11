@@ -4,8 +4,6 @@
 #include <format>
 using namespace mix;
 
-static std::unordered_map<std::string, NodeMaterialCreator> NodeMaterials;
-
 std::shared_ptr<NodeMaterial> NodeMaterial::create(const std::unordered_map<std::string, MaterialValue>& values) {
 
 	auto m = std::shared_ptr<NodeMaterial>(new NodeMaterial());
@@ -34,8 +32,7 @@ NodeMaterial* NodeMaterial::fromMaterial(Material* material) {
 }
 
 NodeMaterial* NodeMaterial::createNodeMaterialFromType(const std::string& type) {
-	auto& creator = NodeMaterials.find(type)->second;
-	return creator.create();
+	return nullptr;
 }
 
 void NodeMaterial::copyMaterialProperties(Material* material) {

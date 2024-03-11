@@ -31,6 +31,7 @@ namespace mix {
 
         static std::shared_ptr<MeshBasicMaterial> create(const std::unordered_map<std::string, MaterialValue>& values = {});
 
+        virtual void setDefaultValues() override;
     protected:
         MeshBasicMaterial();
 

@@ -31,9 +31,9 @@ namespace mix {
 		MATRIX4,
 	};
 
-	std::array<std::string,2> defaultShaderStages{ "fragment" ,"vertex" };
-	std::array<std::string, 3> defaultBuildStages{ "setup" ,"analyze", "generate" };
-	std::array<std::string, 3> shaderStages{ "fragment" ,"vertex","compute"};
-	std::array<std::string, 4> vectorComponents{ "x" ,"y", "z", "w" };
+	extern std::array<std::string,2> defaultShaderStages;
+	extern std::array<std::string, 3> defaultBuildStages;
+	extern std::array<std::string, 3> shaderStages;
+	extern std::array<std::string, 4> vectorComponents;
 }
 

@@ -38,7 +38,7 @@ const std::string& Nodes::getCacheKey(Scene* scene, LightsNode* lightsNode) {
 
 		std::shared_ptr<CacheKeyData> cacheKeyDataPtr = std::make_shared<CacheKeyData>();
 		cacheKeyDataPtr->callId = callId;
-		cacheKeyDataPtr->cacheKey = utils::join(cacheKey, ',');
+		cacheKeyDataPtr->cacheKey = utils::join(cacheKey, ",");
 
 		callHashCache.set(chain, cacheKeyDataPtr);
 	}

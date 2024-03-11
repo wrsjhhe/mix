@@ -178,9 +178,11 @@ endforeach ()
 set(sources 
 		"canvas/Canvas.cpp"
 
+		"nodes/core/constants.cpp"
 		"nodes/core/NodeUtils.cpp"
 		"nodes/core/NodeBuilder.cpp"
 		"nodes/core/NodeCache.cpp"
+		"nodes/core/UniformGroupNode.cpp"
 		"nodes/core/NodeUniform.cpp"
 		"nodes/core/Node.cpp"
 		"nodes/core/TempNode.cpp"

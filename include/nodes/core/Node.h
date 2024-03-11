@@ -52,9 +52,13 @@ namespace mix {
 		const std::string& getNodeType(NodeBuilder* builder);
 
 		virtual void build(NodeBuilder* builder,void* output = nullptr);
+	};
 
-		static void addNodeClass(const std::string& type,const std::function<std::shared_ptr<Node>()>& nodeClass);
-
-		static std::shared_ptr<Node> createNodeFromType(const std::string& type);
+	class NodeCreator {
+	public:
+		template<typename T, typename ...Args, typename = typename std::enable_if<std::is_base_of_v<Node, T>, void>::type>
+		static std::shared_ptr<T> creatByType(Args... args) {
+			return std::make_shared<T>(...args);
+		}
 	};
 }

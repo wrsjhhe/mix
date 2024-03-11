@@ -11,18 +11,13 @@ namespace mix {
 
 		StructTypeNode(const std::vector<std::string>& types):
 			Node(), types(types)
-		{
-			static std::function<std::shared_ptr<StructTypeNode>()> creator = []() {
-				return std::shared_ptr<StructTypeNode>();
-			};
-			Node::addNodeClass("StructTypeNode", creator);
-		}
+		{}
 
 		virtual std::string type() override {
 			return "StructTypeNode";
 		}
 
-		const std::vector<std::string>& ()  {
+		const std::vector<std::string>& getMemberTypes()  {
 			return types;
 		}
 	};

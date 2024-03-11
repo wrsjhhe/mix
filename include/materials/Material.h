@@ -79,12 +79,13 @@ namespace mix {
 
         void (*onBeforeCompile)() = nullptr;
 
-        std::unordered_map<std::string, std::any> properties;
+        std::unordered_map<std::string, std::any> values;
          
         Material(const Material&) = delete;
 
         std::string uuid() const;
 
+        virtual void setDefaultValues();
         void setValues(const std::unordered_map<std::string, MaterialValue>& values);
 
         void dispose();

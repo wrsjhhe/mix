@@ -36,8 +36,12 @@ namespace mix {
 	protected:
 		NodeMaterial();
 	};
-	struct NodeMaterialCreator
-	{
-		virtual NodeMaterial* create() { nullptr; };
+
+	class NodeMaterialCreator {
+	public:
+		template<typename T, typename ...Args, typename = typename std::enable_if<std::is_base_of_v<NodeMaterial, T>, void>::type>
+		static std::shared_ptr<T> creatByType(Args... args) {
+			return std::make_shared<T>(...args);
+		}
 	};
 }
