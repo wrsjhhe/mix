@@ -144,5 +144,9 @@ namespace mix {
 		NodeStageData& getDataFromNode(Node* node, std::string shaderStage = "",NodeCache* cache = nullptr);
 
 		void build(bool convertMaterial = true);
+
+		uint32_t getTypeLength(const std::string& type);
+
+		std::string getVectorType(std::string type);
 	};
 }

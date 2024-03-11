@@ -5,15 +5,16 @@
 using namespace mix;
 
 RenderList* RenderLists::get(const Scene* scene, const Camera* camera) {
-	auto keys = std::pair<const Scene*, const Camera*>(scene, camera);
+	std::vector<void*> keys;
+	keys.push_back(const_cast<Scene*>(scene));
+	keys.push_back(const_cast<Camera*>(camera));
 
-	auto iter = lists.find(keys);
-	if (iter == lists.end()) {
-		lists[keys] = std::make_shared<RenderList>();
+	void* res = lists.get(keys);
+	if (res == nullptr) {
+		lists.set(keys, std::make_shared<RenderList>());
 	}
 
-	auto list = lists[keys];
-	return list.get();
+	return  reinterpret_cast<RenderList*>(lists.get(keys));
 }
 
 void RenderLists::dispose() {
