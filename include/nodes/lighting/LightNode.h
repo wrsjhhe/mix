@@ -14,6 +14,9 @@ namespace mix {
 
 		LightNode(const std::string& scope = LightNode::TARGET_DIRECTION, Light* light = nullptr);
 
+		virtual std::string type() override {
+			return "LightNode";
+		}
 		void setup();
 		
 	};

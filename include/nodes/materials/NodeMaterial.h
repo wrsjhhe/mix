@@ -5,9 +5,13 @@
 namespace mix {
 	class LightsNode;
 	class EnvironmentNode;
+	class NodeBuilder;
+
 	class NodeMaterial : public ShaderMaterial{
 	public:
 		virtual std::string type() const override;
+
+		bool isShadowNodeMaterial = false;
 
 		bool forceSinglePass = false;
 
@@ -20,12 +24,20 @@ namespace mix {
 		LightsNode* lightsNode = nullptr;
 		EnvironmentNode* envNode = nullptr;
 
-		static std::shared_ptr<NodeMaterial> create();
-		static std::shared_ptr<NodeMaterial> fromMaterial(Material* material);
+		virtual void copyMaterialProperties(Material* material);
 
+		void build(NodeBuilder* builder);
+
+		static std::shared_ptr<NodeMaterial> create(const std::unordered_map<std::string, MaterialValue>& values = {});
+		static NodeMaterial* fromMaterial(Material* material);
+		static NodeMaterial* createNodeMaterialFromType(const std::string& type);
 
 
 	protected:
 		NodeMaterial();
+	};
+	struct NodeMaterialCreator
+	{
+		virtual NodeMaterial* create() { nullptr; };
 	};
 }

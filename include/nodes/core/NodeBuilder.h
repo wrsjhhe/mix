@@ -20,13 +20,17 @@ namespace mix {
 	class FogNode;
 	class ToneMappingNode;
 	class ClippingContext;
+	class NodeUniform;
+	class StructTypeNode;
+	class UniformGroupNode;
 
 	class NodeBuilder {
 	public:
+		template<typename T>
 		struct ShaderContainer {
-			std::vector<std::string> vertex;
-			std::vector<std::string> fragment;
-			std::vector<std::string> compute;
+			std::vector<T> vertex;
+			std::vector<T> fragment;
+			std::vector<T> compute;
 			uint32_t index = 0;
 		};
 
@@ -58,11 +62,11 @@ namespace mix {
 		std::string fragmentShader;
 		std::string computeShader;
 
-		ShaderContainer flowNodes;
-		ShaderContainer flowCode;
-		ShaderContainer uniforms;
-		ShaderContainer structs;
-		ShaderContainer bindings;
+		ShaderContainer<Object3D*> flowNodes;
+		ShaderContainer<std::string> flowCode;
+		ShaderContainer<NodeUniform*> uniforms;
+		ShaderContainer<StructTypeNode*> structs;
+		ShaderContainer<UniformGroupNode*> bindings;
 
 		BindingsOffset bindingsOffset;
 

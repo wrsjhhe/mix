@@ -58,7 +58,7 @@ void NodeBuilder::build(bool convertMaterial) {
 			NodeMaterial::fromMaterial(material)->build(this);
 		}
 		else {
-			this.addFlow('compute', object);
+			//addFlow('compute', object);
 		}
 
 	}

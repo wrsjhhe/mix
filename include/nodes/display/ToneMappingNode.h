@@ -9,5 +9,9 @@ namespace mix {
 		ToneMapping toneMapping;
 	public:
 		ToneMappingNode(ToneMapping toneMapping = ToneMapping::None);
+
+		virtual std::string type() override {
+			return "ToneMappingNode";
+		}
 	};
 }

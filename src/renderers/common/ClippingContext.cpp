@@ -3,7 +3,7 @@
 #include <renderers/common/Renderer.h>
 #include <cameras/Camera.h>
 #include <nodes/materials/NodeMaterial.h>
-
+#include <nodes/shadernode/ShaderNode.h>
 using namespace mix;
 
 unsigned int _clippingContextVersion = 0;
