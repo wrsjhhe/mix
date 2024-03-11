@@ -16,6 +16,8 @@ namespace mix {
 		virtual std::string getCode() = 0;
 
 		static bool isNodeFunction;
+
+		virtual ~NodeFunction(){}
 	};
 
 	bool NodeFunction::isNodeFunction = true;

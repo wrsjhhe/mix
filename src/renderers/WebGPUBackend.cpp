@@ -69,7 +69,7 @@ WebGPUBackend::~WebGPUBackend() {
 }
 
 void WebGPUBackend::init(Renderer* renderer) {
-	renderer = renderer;
+	this->renderer = renderer;
 
 	textureUtils = std::make_shared<WebGPUTextureUtils>(this);
 	utils = std::make_shared<WebGPUUtils>();

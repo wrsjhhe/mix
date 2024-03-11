@@ -101,7 +101,7 @@ namespace mix {
 
 	public:
 		NodeBuilder(Object3D* object,Renderer* renderer, std::shared_ptr<NodeParser> parser, Scene* scene = nullptr,Material* material = nullptr);
-
+		virtual ~NodeBuilder();
 		template <typename T>
 		std::string getTypeFromArray(std::vector<T> array) {
 			if (std::is_same<int8_t, T>::value) {

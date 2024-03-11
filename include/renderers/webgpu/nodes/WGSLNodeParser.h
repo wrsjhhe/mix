@@ -8,5 +8,7 @@ namespace mix {
 		virtual std::shared_ptr<NodeFunction> parseFunction(const std::string& source) {
 			return std::make_shared<WGSLNodeFunction>(source);
 		}
+
+		virtual ~WGSLNodeParser(){}
 	};
 }

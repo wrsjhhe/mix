@@ -85,6 +85,10 @@ WGSLNodeFunction::WGSLNodeFunction(const std::string& source) {
     blockCode = parsed.blockCode;
 }
 
+WGSLNodeFunction::~WGSLNodeFunction() {
+
+}
+
 std::string WGSLNodeFunction::getCode() {
     std::string type = this->type != "void" ? "-> " + this->type : "";
 

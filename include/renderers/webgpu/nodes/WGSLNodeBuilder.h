@@ -23,7 +23,7 @@ namespace mix {
 		Builtins builtins;
 
 		WGSLNodeBuilder(Object3D* object,Renderer* renderer, Scene* scene = nullptr);
-
+		virtual ~WGSLNodeBuilder();
 
 	};
 }

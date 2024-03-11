@@ -31,6 +31,7 @@ NodeBuilder::NodeBuilder(Object3D* object, Renderer* renderer, std::shared_ptr<N
 
 	context.material = material;
 }
+NodeBuilder::~NodeBuilder(){}
 
 NodeStageDataProperties& NodeBuilder::getNodeProperties(Node* node, const std::string& shaderStage) {
 	NodeStageData& nodeData = getDataFromNode(node, shaderStage);

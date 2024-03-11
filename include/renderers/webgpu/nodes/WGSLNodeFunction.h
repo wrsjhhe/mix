@@ -10,7 +10,7 @@ namespace mix {
 		std::string blockCode;
 
 		WGSLNodeFunction(const std::string& source);
-
+		virtual ~WGSLNodeFunction();
 		std::string getCode();
 	};
 }
