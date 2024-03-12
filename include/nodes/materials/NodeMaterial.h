@@ -6,6 +6,7 @@ namespace mix {
 	class LightsNode;
 	class EnvironmentNode;
 	class NodeBuilder;
+	class Node;
 
 	class NodeMaterial : public ShaderMaterial{
 	public:
@@ -24,9 +25,15 @@ namespace mix {
 		LightsNode* lightsNode = nullptr;
 		EnvironmentNode* envNode = nullptr;
 
+		Node* vertexNode;
+
 		virtual void copyMaterialProperties(Material* material);
 
 		void build(NodeBuilder* builder);
+
+		void setup(NodeBuilder* builder);
+
+		Node* setupPosition(NodeBuilder* builder);
 
 		static std::shared_ptr<NodeMaterial> create(const std::unordered_map<std::string, MaterialValue>& values = {});
 		static NodeMaterial* fromMaterial(Material* material);

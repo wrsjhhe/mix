@@ -11,6 +11,6 @@ bool TempNode::hasDependencies(NodeBuilder* builder) {
 	return builder->getDataFromNode(this).usageCount > 1;
 }
 
-void TempNode::build(NodeBuilder* builder, void* output) {
-
+std::string TempNode::build(NodeBuilder* builder, const std::string& output)  {
+	return "";
 }

@@ -122,4 +122,9 @@ namespace mix::utils {
 
 	float parseFloat(const std::string& str);
 
+	inline const std::string& emptyString() {
+		static std::string emtry;
+		return emtry;
+	}
+
 }

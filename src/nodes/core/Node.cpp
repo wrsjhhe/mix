@@ -28,7 +28,7 @@ void Node::traverse(NodeTraverseCallback callback) {
 }
 
 
-const std::string& Node::getNodeType(NodeBuilder* builder) {
+std::string Node::getNodeType(NodeBuilder* builder) {
 	auto& nodeProperties = builder->getNodeProperties(this);
 	if (nodeProperties.outputNode) {
 		return nodeProperties.outputNode->getNodeType(builder);
@@ -37,6 +37,6 @@ const std::string& Node::getNodeType(NodeBuilder* builder) {
 	return nodeType;
 }
 
-void Node::build(NodeBuilder* builder, void* output) {
-
+std::string Node::build(NodeBuilder* builder, const std::string& output) {
+	return "";
 }

@@ -6,6 +6,7 @@
 #include <nodes/core/IContainNodes.h>
 #include <functional>
 #include <string>
+#include <utils/StringUtils.h>
 
 namespace mix {
 	typedef std::function<void(Node*)> NodeTraverseCallback;
@@ -49,9 +50,9 @@ namespace mix {
 
 		NodeUpdateType getUpdateBeforeType() { return updateBeforeType; }
 
-		const std::string& getNodeType(NodeBuilder* builder);
+		virtual std::string getNodeType(NodeBuilder* builder);
 
-		virtual void build(NodeBuilder* builder,void* output = nullptr);
+		virtual std::string build(NodeBuilder* builder,const std::string& output = utils::emptyString());
 	};
 
 	class NodeCreator {

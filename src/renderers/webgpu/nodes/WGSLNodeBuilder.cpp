@@ -14,3 +14,7 @@ WGSLNodeBuilder::WGSLNodeBuilder(Object3D* object, Renderer* renderer, Scene* sc
 WGSLNodeBuilder::~WGSLNodeBuilder() {
 
 }
+
+void WGSLNodeBuilder::buildCode() {
+
+}

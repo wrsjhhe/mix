@@ -5,11 +5,15 @@
 #include <nodes/core/NodeParser.h>
 #include <nodes/core/Node.h>
 #include <nodes/core/NodeCache.h>
+#include <nodes/core/StackNode.h>
+#include <nodes/shadernode/ShaderNode.h>
 #include <renderers/common/Renderer.h>
 #include <nodes/materials/NodeMaterial.h>
+#include <nodes/core/constants.h>
 #include <unordered_map>
 #include <string>
 #include <regex>
+#include <format>
 
 using namespace mix;
 
@@ -30,6 +34,9 @@ NodeBuilder::NodeBuilder(Object3D* object, Renderer* renderer, std::shared_ptr<N
 	}
 
 	context.material = material;
+
+	cache = std::make_shared<NodeCache>();
+	globalCache = cache.get();
 }
 NodeBuilder::~NodeBuilder(){}
 
@@ -44,6 +51,9 @@ NodeStageData& NodeBuilder::getDataFromNode(Node* node, std::string shaderStage,
 	}
 
 	cache = cache == nullptr ? (node->isGlobal() ? globalCache : cache) : cache;
+	if (cache == nullptr) {
+		throw std::exception("cache is null");
+	}
 	NodeData* nodeData = cache->getNodeData(node);
 	if (nodeData == nullptr) {
 		cache->setNodeData(node, std::make_shared<NodeData>());
@@ -54,7 +64,7 @@ NodeStageData& NodeBuilder::getDataFromNode(Node* node, std::string shaderStage,
 	return (*nodeData)[shaderStage];
 }
 
-void NodeBuilder::build(bool convertMaterial) {
+NodeBuilder* NodeBuilder::build(bool convertMaterial) {
 	if (convertMaterial) {
 		if (material != nullptr) {
 			NodeMaterial::fromMaterial(material)->build(this);
@@ -62,8 +72,40 @@ void NodeBuilder::build(bool convertMaterial) {
 		else {
 			//addFlow("compute", object);
 		}
-
 	}
+
+	for (auto& buildStage : defaultBuildStages) {
+		setBuildStage(buildStage);
+
+		if (context.vertex) {
+			flowNodeFromShaderStage("vertex", context.vertex);
+		}
+
+		for (auto& shaderStage : shaderStages) {
+			setShaderStage(shaderStage);
+
+			auto flowNodes = this->flowNodes.value[shaderStage];
+
+			for (auto& node : flowNodes) {
+				if (buildStage == "generate") {
+					//flowNode(node);
+				}
+				else {
+					node->build(this);
+				}
+			}
+		}
+	}
+
+	setBuildStage(nullptr);
+	setShaderStage(nullptr);
+
+	// stage 4: build code for a specific output
+
+	buildCode();
+	buildUpdateNodes();
+
+	return this;
 }
 
 uint32_t NodeBuilder::getTypeLength(const std::string& type) {
@@ -91,4 +133,83 @@ std::string NodeBuilder::getVectorType(std::string type) {
 	if (type == "texture" || type == "cubeTexture" || type == "storageTexture") return "vec4";
 
 	return type;
+}
+
+StackNode* NodeBuilder::addStack() {
+	std::shared_ptr<StackNode> _stack = std::make_shared<StackNode>(stack);
+	stacks.emplace_back(_stack);
+	stack = _stack.get();
+	setCurrentStack(stack);
+	return stack;
+}
+
+StackNode* NodeBuilder::removeStack() {
+	StackNode* lastStack = stack;
+	stack = lastStack->parent;
+
+	auto back = stacks.back();
+	stacks.pop_back();
+	setCurrentStack(back.get());
+
+	return lastStack;
+}
+
+void NodeBuilder::setBuildStage(const std::string& buildStage) {
+	this->buildStage = buildStage;
+}
+const std::string& NodeBuilder::getBuildStage() {
+	return buildStage;
+}
+
+void NodeBuilder::setShaderStage(const std::string& shaderStage) {
+	this->shaderStage = shaderStage;
+}
+const std::string& NodeBuilder::getShaderStage() {
+	return shaderStage;
+}
+
+NodeBuilder::FlowData NodeBuilder::flowNodeFromShaderStage(const std::string& shaderStage, Node* node, const std::string& output, const std::string& propertyName) {
+	const std::string& previousShaderStage = shaderStage;
+	setShaderStage(shaderStage);
+
+	FlowData flowData = flowChildNode(node, output);
+
+	if (propertyName != utils::emptyString()) {
+		flowData.code += std::format("{} = {};\n", tab + propertyName, flowData.result);
+	}
+
+	flowCode.value[shaderStage] = flowCode.value[shaderStage] + flowData.code;
+
+	setShaderStage(previousShaderStage);
+
+	return flowData;
+}
+
+NodeBuilder::FlowData NodeBuilder::flowChildNode(Node* node, const std::string& output) {
+	FlowData previousFlow = flow;
+
+	FlowData flow;
+	this->flow = flow;
+
+	flow.result = node->build(this, output);
+
+	this->flow = previousFlow;
+
+	return flow;
+}
+
+void NodeBuilder::buildUpdateNodes() {
+	for (auto& node : nodes) {
+
+		auto updateType = node->getUpdateType();
+		auto updateBeforeType = node->getUpdateBeforeType();
+
+		if (updateType != NodeUpdateType::NONE) {
+			updateNodes.emplace_back(node->getSelf());
+		}
+
+		if (updateBeforeType != NodeUpdateType::NONE) {
+			updateBeforeNodes.emplace_back(node);
+		}
+	}
 }

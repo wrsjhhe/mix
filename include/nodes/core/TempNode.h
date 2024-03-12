@@ -2,6 +2,7 @@
 
 #include <nodes/core/Node.h>
 #include <string>
+#include <utils/StringUtils.h>
 
 namespace mix {
 	class NodeBuilder;
@@ -14,6 +15,6 @@ namespace mix {
 
 		bool hasDependencies(NodeBuilder* builder);
 
-		virtual void build(NodeBuilder* builder, void* output = nullptr) override;
+		virtual std::string build(NodeBuilder* builder, const std::string& output = utils::emptyString()) override;
 	};
 }

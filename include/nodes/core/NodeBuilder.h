@@ -6,6 +6,8 @@
 #include <memory>
 #include <nodes/core/NodeKeywords.h>
 #include <nodes/core/NodeCache.h>
+#include <utils/WeakMap.h>
+#include <utils/StringUtils.h>
 
 namespace mix {
 	class Object3D;
@@ -23,14 +25,17 @@ namespace mix {
 	class NodeUniform;
 	class StructTypeNode;
 	class UniformGroupNode;
+	class StackNode;
+	class ModelViewProjectionNode;
 
 	class NodeBuilder {
 	public:
 		template<typename T>
 		struct ShaderContainer {
-			std::vector<T> vertex;
-			std::vector<T> fragment;
-			std::vector<T> compute;
+			std::unordered_map<std::string, T> value;
+			//std::vector<T> vertex;
+			//std::vector<T> fragment;
+			//std::vector<T> compute;
 			uint32_t index = 0;
 		};
 
@@ -62,7 +67,7 @@ namespace mix {
 		std::string fragmentShader;
 		std::string computeShader;
 
-		ShaderContainer<Object3D*> flowNodes;
+		ShaderContainer<std::vector<Node*>> flowNodes;
 		ShaderContainer<std::string> flowCode;
 		ShaderContainer<NodeUniform*> uniforms;
 		ShaderContainer<StructTypeNode*> structs;
@@ -74,6 +79,14 @@ namespace mix {
 		{
 			NodeKeywords keywords;
 			Material* material;
+			StackNode* vertex;
+			ModelViewProjectionNode* mvp;
+		};
+
+		struct FlowData
+		{
+			std::string code;
+			std::string result;
 		};
 
 		Context context;
@@ -86,18 +99,21 @@ namespace mix {
 		this.vars = {};
 		this.flow = { code: '' };
 		this.chaining = [];
-		this.stack = stack();
-		this.stacks = [];
-		this.tab = '\t';
 
-		this.currentFunctionNode = null;
+		this.currentFunctionNode = null;*/
 
-		this.flowsData = new WeakMap();
+		StackNode* stack;
+		std::vector<std::shared_ptr<StackNode>> stacks;
 
-		this.buildStage = null;*/
 		std::string shaderStage;
 		std::shared_ptr<NodeCache> cache;
 		NodeCache* globalCache;
+		std::string buildStage;
+
+		FlowData flow;
+		WeakMap flowsData;
+
+		std::string tab = "\t";
 
 	public:
 		NodeBuilder(Object3D* object,Renderer* renderer, std::shared_ptr<NodeParser> parser, Scene* scene = nullptr,Material* material = nullptr);
@@ -143,10 +159,28 @@ namespace mix {
 
 		NodeStageData& getDataFromNode(Node* node, std::string shaderStage = "",NodeCache* cache = nullptr);
 
-		void build(bool convertMaterial = true);
+		NodeBuilder* build(bool convertMaterial = true);
 
 		uint32_t getTypeLength(const std::string& type);
 
 		std::string getVectorType(std::string type);
-	};
+
+		StackNode* addStack();
+
+		StackNode* removeStack();
+
+		void setBuildStage(const std::string& buildStage);
+		const std::string& getBuildStage();
+
+		void setShaderStage(const std::string& shaderStage);
+		const std::string& getShaderStage();
+
+		FlowData flowNodeFromShaderStage(const std::string& shaderStage,Node* node,const std::string& output = utils::emptyString(), const std::string& propertyName = utils::emptyString());
+	
+		FlowData flowChildNode(Node* node,const std::string& output = utils::emptyString());
+
+		virtual void buildCode() = 0;
+
+	    void buildUpdateNodes();
+};
 }
