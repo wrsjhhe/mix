@@ -15,7 +15,7 @@ int main(int, char**) {
 	auto scene = Scene::create();
 	auto camera = PerspectiveCamera::create(60, 800/600, 0.1, 100);
 
-	renderer.render(*scene,*camera);
+	renderer.render(scene.get(), camera.get());
 
 	return 0;
 }

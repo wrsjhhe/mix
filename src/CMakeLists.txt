@@ -25,6 +25,8 @@ set(publicHeaders
 	"nodes/core/NodeFrame.h"
 	"nodes/core/NodeKeywords.h"
 	"nodes/core/StructTypeNode.h"
+	"nodes/core/InputNode.h"
+	"nodes/core/UniformNode.h"
 	"nodes/accessors/ModelViewProjectionNode.h"
 	"nodes/utils/SplitNode.h"
 	"nodes/math/CondNode.h"
@@ -58,7 +60,9 @@ set(publicHeaders
 
 	"renderers/common/nodes/Nodes.h"
 	"renderers/common/nodes/NodeBuilderState.h"
-	
+	"renderers/common/nodes/NodeUniformsGroup.h"
+	"renderers/common/nodes/NodeUniform.h"
+
 	"renderers/common/Info.h"
 	"renderers/common/Renderer.h"
 	"renderers/common/Attributes.h"
@@ -221,6 +225,7 @@ set(sources
 
 		"renderers/common/nodes/Nodes.cpp"
 		"renderers/common/nodes/NodeBuilderState.cpp"
+		"renderers/common/nodes/NodeUniformsGroup.cpp"
 
 		"renderers/common/Info.cpp"
 		"renderers/common/Renderer.cpp"

@@ -8,12 +8,14 @@
 #include <nodes/core/StackNode.h>
 #include <nodes/shadernode/ShaderNode.h>
 #include <renderers/common/Renderer.h>
+#include <renderers/common/nodes/NodeUniformsGroup.h>
 #include <nodes/materials/NodeMaterial.h>
 #include <nodes/core/constants.h>
 #include <unordered_map>
 #include <string>
 #include <regex>
 #include <format>
+
 
 using namespace mix;
 
@@ -218,4 +220,28 @@ const std::vector<NodeAttribute*> NodeBuilder::getAttributesArray() {
 	std::vector<NodeAttribute*> res = attributes;
 	res.insert(res.end(), bufferAttributes.begin(), bufferAttributes.end());
 	return res;
+}
+
+const std::vector<NodeUniformsGroup*>& NodeBuilder::getBindings() {
+
+	if (bindingsArray.empty()) {
+
+		
+
+	}
+
+	return bindingsArray;
+}
+
+const std::vector<NodeUniformsGroup*>& NodeBuilder::_getSharedBindings(const std::vector<NodeUniformsGroup*>& bindings) {
+	std::vector<NodeUniformsGroup*> shared;
+	for (auto& binding : bindings) {
+		if (binding->shared()) {
+			// nodes is the chainmap key
+			auto nodes = binding->getNodes();
+		}
+		else {
+
+		}
+	}
 }

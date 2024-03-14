@@ -3,17 +3,17 @@
 #include <string>
 
 namespace mix {
-	class Node;
+	class UniformNode;
 	class UniformGroupNode;
 
 	class NodeUniform {
 	public:
 		std::string name;
 		std::string type;
-		Node* node = nullptr;
+		UniformNode* node = nullptr;
 		bool needsUpdate = false;
 		
-		NodeUniform(const std::string& name,const std::string& type, Node* node, bool needsUpdate = false);
+		NodeUniform(const std::string& name,const std::string& type, UniformNode* node, bool needsUpdate = false);
 
 		void* value();
 

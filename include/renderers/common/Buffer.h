@@ -13,7 +13,7 @@ namespace mix {
 		explicit Buffer(const std::string& name, const std::vector<float>& buffer = std::vector<float>());
 		virtual ~Buffer();
 
-		uint32_t byteLength() const;
+		virtual uint32_t byteLength() const;
 
 		const std::vector<float>& buffer() const;
 

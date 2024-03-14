@@ -1,9 +1,9 @@
 #include <nodes/core/NodeUniform.h>
-#include <nodes/core/Node.h>
+#include <nodes/core/UniformNode.h>
 using namespace mix;
 
-NodeUniform::NodeUniform(const std::string& name, const std::string& type, Node* node, bool needsUpdate) :
-	name(name),type(type),node(node->getSelf()),needsUpdate(needsUpdate)
+NodeUniform::NodeUniform(const std::string& name, const std::string& type, UniformNode* node, bool needsUpdate) :
+	name(name),type(type),node(node),needsUpdate(needsUpdate)
 {
 
 }

@@ -28,6 +28,7 @@ namespace mix {
 	class StackNode;
 	class ModelViewProjectionNode;
 	class NodeAttribute;
+	class NodeUniformsGroup;
 
 	class NodeBuilder {
 	public:
@@ -92,7 +93,7 @@ namespace mix {
 
 		Context context;
 
-		/*this.bindingsArray = null;
+		/*
 		this.varyings = [];
 		this.codes = {};
 		this.vars = {};
@@ -116,9 +117,10 @@ namespace mix {
 
 		std::vector<NodeAttribute*> attributes;
 		std::vector<NodeAttribute*> bufferAttributes;
+		std::vector<NodeUniformsGroup*> bindingsArray;
 
 	public:
-		NodeBuilder(Object3D* object,Renderer* renderer, std::shared_ptr<NodeParser> parser, Scene* scene = nullptr,Material* material = nullptr);
+		NodeBuilder(Object3D* object, Renderer* renderer, std::shared_ptr<NodeParser> parser, Scene* scene = nullptr, Material* material = nullptr);
 		virtual ~NodeBuilder();
 		template <typename T>
 		std::string getTypeFromArray(std::vector<T> array) {
@@ -146,7 +148,7 @@ namespace mix {
 			else {
 				throw std::exception("Unsupported data types!");
 			}
-			
+
 		}
 
 		void setCache(const std::shared_ptr<NodeCache>& cache) {
@@ -157,9 +159,9 @@ namespace mix {
 		}
 		virtual bool isAvailable(const std::string& name) { return false; }
 
-		NodeStageDataProperties& getNodeProperties(Node* node,const std::string& shaderStage = "any");
+		NodeStageDataProperties& getNodeProperties(Node* node, const std::string& shaderStage = "any");
 
-		NodeStageData& getDataFromNode(Node* node, std::string shaderStage = "",NodeCache* cache = nullptr);
+		NodeStageData& getDataFromNode(Node* node, std::string shaderStage = "", NodeCache* cache = nullptr);
 
 		NodeBuilder* build(bool convertMaterial = true);
 
@@ -177,14 +179,18 @@ namespace mix {
 		void setShaderStage(const std::string& shaderStage);
 		const std::string& getShaderStage();
 
-		FlowData flowNodeFromShaderStage(const std::string& shaderStage,Node* node,const std::string& output = utils::emptyString(), const std::string& propertyName = utils::emptyString());
-	
-		FlowData flowChildNode(Node* node,const std::string& output = utils::emptyString());
+		FlowData flowNodeFromShaderStage(const std::string& shaderStage, Node* node, const std::string& output = utils::emptyString(), const std::string& propertyName = utils::emptyString());
+
+		FlowData flowChildNode(Node* node, const std::string& output = utils::emptyString());
 
 		virtual void buildCode() = 0;
 
-	    void buildUpdateNodes();
+		void buildUpdateNodes();
 
 		const std::vector<NodeAttribute*> getAttributesArray();
-};
+		const std::vector<NodeUniformsGroup*>& getBindings();
+
+	private:
+		const std::vector<NodeUniformsGroup*>& _getSharedBindings(const std::vector<NodeUniformsGroup*>& bindings);
+	};
 }
