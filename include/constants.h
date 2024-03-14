@@ -234,5 +234,16 @@ namespace mix {
 		LinearDisplayP3ColorSpace
 	};
 
-	const int WebGPUCoordinateSystem = 2001;
+	const unsigned int WebGPUCoordinateSystem = 2001;
+
+	enum class AttributeType
+	{
+		VERTEX = 1,
+		INDEX = 2,
+		STORAGE = 4
+	};
+
+	const unsigned int GPU_CHUNK_BYTES = 16;
+	const unsigned int BlendColorFactor = 211;
+	const unsigned int OneMinusBlendColorFactor = 212;
 }

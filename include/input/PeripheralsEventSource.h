@@ -13,7 +13,7 @@ namespace mix {
     class PeripheralsEventSource {
 
     public:
-        [[nodiscard]] virtual WindowSize size() const = 0;
+        [[nodiscard]] virtual const WindowSize& size() const = 0;
 
         void setIOCapture(IOCapture* capture);
 

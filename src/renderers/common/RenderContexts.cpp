@@ -7,8 +7,8 @@
 
 using namespace mix;
 
-RenderContext* RenderContexts::get(const Scene* scene, const Camera* camera, RenderTarget* renderTarget) {
-	auto chainKey = std::pair<const Scene*, const Camera*>(scene, camera);
+RenderContext* RenderContexts::get(Scene* scene, Camera* camera, RenderTarget* renderTarget) {
+	auto chainKey = std::pair<Scene*, Camera*>(scene, camera);
 	std::string attachmentState = "";
 
 	if (renderTarget == nullptr) {
@@ -23,7 +23,7 @@ RenderContext* RenderContexts::get(const Scene* scene, const Camera* camera, Ren
 
 	auto iter = chainMaps.find(attachmentState);
 	if (iter == chainMaps.end()) {
-		chainMaps[attachmentState] = std::map<std::pair<const Scene*, const Camera*>, std::shared_ptr<RenderContext>>();
+		chainMaps[attachmentState] = std::map<std::pair<Scene*, Camera*>, std::shared_ptr<RenderContext>>();
 	}
 
 	auto chainMap = chainMaps[attachmentState];

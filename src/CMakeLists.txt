@@ -58,7 +58,7 @@ set(publicHeaders
 
 	"renderers/common/nodes/Nodes.h"
 	"renderers/common/nodes/NodeBuilderState.h"
-
+	
 	"renderers/common/Info.h"
 	"renderers/common/Renderer.h"
 	"renderers/common/Attributes.h"
@@ -76,6 +76,12 @@ set(publicHeaders
 	"renderers/common/RenderContext.h"
 	"renderers/common/RenderContexts.h"
 	"renderers/common/ClippingContext.h"
+	"renderers/common/BufferUtils.h"
+	"renderers/common/Binding.h"
+	"renderers/common/Buffer.h"
+	"renderers/common/UniformBuffer.h"
+	"renderers/common/UniformsGroup.h"
+	"renderers/common/Uniform.h"
 
 	"renderers/webgpu/utils/WebGPUUtils.h"
 	"renderers/webgpu/utils/WebGPUAttributeUtils.h"
@@ -232,6 +238,8 @@ set(sources
 		"renderers/common/RenderContext.cpp"
 		"renderers/common/RenderContexts.cpp"
 		"renderers/common/ClippingContext.cpp"
+		"renderers/common/Buffer.cpp"
+		"renderers/common/UniformsGroup.cpp"
 
 		"renderers/webgpu/utils/WebGPUUtils.cpp"
 		"renderers/webgpu/utils/WebGPUAttributeUtils.cpp"

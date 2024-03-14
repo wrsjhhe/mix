@@ -27,6 +27,7 @@ namespace mix {
 	class UniformGroupNode;
 	class StackNode;
 	class ModelViewProjectionNode;
+	class NodeAttribute;
 
 	class NodeBuilder {
 	public:
@@ -92,8 +93,6 @@ namespace mix {
 		Context context;
 
 		/*this.bindingsArray = null;
-		this.attributes = [];
-		this.bufferAttributes = [];
 		this.varyings = [];
 		this.codes = {};
 		this.vars = {};
@@ -114,6 +113,9 @@ namespace mix {
 		WeakMap flowsData;
 
 		std::string tab = "\t";
+
+		std::vector<NodeAttribute*> attributes;
+		std::vector<NodeAttribute*> bufferAttributes;
 
 	public:
 		NodeBuilder(Object3D* object,Renderer* renderer, std::shared_ptr<NodeParser> parser, Scene* scene = nullptr,Material* material = nullptr);
@@ -182,5 +184,7 @@ namespace mix {
 		virtual void buildCode() = 0;
 
 	    void buildUpdateNodes();
+
+		const std::vector<NodeAttribute*> getAttributesArray();
 };
 }

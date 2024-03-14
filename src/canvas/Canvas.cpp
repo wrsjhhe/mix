@@ -378,7 +378,7 @@ bool Canvas::animateOnce(const std::function<void()>& f) {
 	return pimpl_->animateOnce(f);
 }
 
-WindowSize Canvas::size() const {
+const WindowSize& Canvas::size() const {
 
 	return pimpl_->getSize();
 }

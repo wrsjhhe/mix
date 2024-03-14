@@ -57,12 +57,12 @@ namespace mix {
 
 		void init();
 
-		void render(Scene& scene, Camera& camera);
+		void render(Scene* scene, Camera* camera);
 
 		Vector2& getDrawingBufferSize(Vector2& target);
 
 	private:
-		void _projectObject(Object3D* object, Camera& camera, unsigned int groupOrder, RenderList* renderList);
+		void _projectObject(Object3D* object, Camera* camera, unsigned int groupOrder, RenderList* renderList);
 
 	private:
 		bool _initialized = false;

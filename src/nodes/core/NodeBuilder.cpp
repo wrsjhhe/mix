@@ -213,3 +213,9 @@ void NodeBuilder::buildUpdateNodes() {
 		}
 	}
 }
+
+const std::vector<NodeAttribute*> NodeBuilder::getAttributesArray() {
+	std::vector<NodeAttribute*> res = attributes;
+	res.insert(res.end(), bufferAttributes.begin(), bufferAttributes.end());
+	return res;
+}

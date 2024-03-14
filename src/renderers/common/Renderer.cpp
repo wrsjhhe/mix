@@ -57,7 +57,7 @@ void Renderer::init() {
 	_initialized = true;
 }
 
-void Renderer::render(Scene& scene, Camera& camera) {
+void Renderer::render(Scene* scene, Camera* camera) {
 	if (!_initialized) {
 		init();
 	}
@@ -68,7 +68,7 @@ void Renderer::render(Scene& scene, Camera& camera) {
 	//const previousRenderObjectFunction = this._currentRenderObjectFunction;
 
 	auto renderTarget = _renderTarget;
-	auto renderContext = _renderContexts->get(&scene, &camera, renderTarget.get());
+	auto renderContext = _renderContexts->get(scene, camera, renderTarget.get());
 	auto activeCubeFace = _activeCubeFace;
 	auto activeMipmapLevel = _activeMipmapLevel;
 
@@ -79,9 +79,9 @@ void Renderer::render(Scene& scene, Camera& camera) {
 
 	nodeFrame->renderId = info.calls;
 
-	if (scene.matrixWorldNeedsUpdate == true) scene.updateMatrixWorld();
+	if (scene->matrixWorldNeedsUpdate == true) scene->updateMatrixWorld();
 
-	if (camera.parent == nullptr && camera.matrixWorldAutoUpdate == true) camera.updateMatrixWorld();
+	if (camera->parent == nullptr && camera->matrixWorldAutoUpdate == true) camera->updateMatrixWorld();
 
 	if (info.autoReset == true) info.reset();
 
@@ -102,8 +102,8 @@ void Renderer::render(Scene& scene, Camera& camera) {
 	float maxDepth = viewport.maxDepth.has_value() ? 1 : viewport.maxDepth.value();
 
 	renderContext->viewportValue.copy(viewport).multiplyScalar(pixelRatio).floor();
-	int width = renderContext->viewportValue.width();
-	int height = renderContext->viewportValue.height();
+	uint32_t width = renderContext->viewportValue.width();
+	uint32_t height = renderContext->viewportValue.height();
 	width >>= activeMipmapLevel;
 	height >>= activeMipmapLevel;
 	renderContext->viewportValue.setWidth(width);
@@ -126,17 +126,37 @@ void Renderer::render(Scene& scene, Camera& camera) {
 	}
 
 	// sceneRef.onBeforeRender(this, scene, camera, renderTarget);
-	auto renderList = _renderLists->get(&scene, &camera);
+	auto renderList = _renderLists->get(scene, camera);
 
 	renderList->begin();
 
-	_projectObject(&scene, camera, 0, renderList);
+	_projectObject(scene, camera, 0, renderList);
 
 	renderList->finish();
 
 	if (sortObjects == true) {
 		renderList->sort();
 	}
+	
+	if (renderTarget != nullptr) {
+
+	}
+	else {
+		renderContext->textures.clear();
+		renderContext->depthTexture = nullptr;
+		renderContext->width = domElement->size().width;
+		renderContext->height = domElement->size().height;
+		renderContext->depth = depth;
+		renderContext->stencil = stencil;
+	}
+
+	renderContext->width >>= activeMipmapLevel;
+	renderContext->height >>= activeMipmapLevel;
+	renderContext->activeCubeFace = activeCubeFace;
+	renderContext->activeMipmapLevel = activeMipmapLevel;
+	renderContext->occlusionQueryCount = renderList->occlusionQueryCount;
+
+	_nodes->updateScene(scene);
 }
 
 
@@ -144,10 +164,10 @@ Vector2& Renderer::getDrawingBufferSize(Vector2& target) {
 	return target.set(_width * _pixelRatio, _height * _pixelRatio).floor();
 }
 
-void Renderer::_projectObject(Object3D* object, Camera& camera, unsigned int groupOrder, RenderList* renderList) {
+void Renderer::_projectObject(Object3D* object, Camera* camera, unsigned int groupOrder, RenderList* renderList) {
 	if (object->visible == false) return;
 
-	bool visible = object->layers.test(camera.layers);
+	bool visible = object->layers.test(camera->layers);
 
 	if (visible) {
 		std::string objectType = object->type();
@@ -157,7 +177,7 @@ void Renderer::_projectObject(Object3D* object, Camera& camera, unsigned int gro
 		}
 		else if (objectType == "LOD") {
 			auto lod = dynamic_cast<LOD*>(object);
-			if (lod->autoUpdate == true) lod->update(camera);
+			if (lod->autoUpdate == true) lod->update(*camera);
 		}
 		else if (objectType == "Light") {
 			auto light = dynamic_cast<Light*>(object);

@@ -15,6 +15,8 @@ namespace mix {
 	class ToneMappingNode;
 	class RenderObject;
 	class NodeBuilderState;
+	class Texture;
+	class NodeBuilder;
 
 	class Nodes : public DataMap {
 	public:
@@ -27,6 +29,11 @@ namespace mix {
 		struct RenderObjectData
 		{
 			std::shared_ptr<NodeBuilderState> nodeBuilderState;
+		};
+
+		struct SceneData
+		{
+			std::shared_ptr<Texture> environment;
 		};
 
 	public:
@@ -47,8 +54,14 @@ namespace mix {
 		const std::string& getForRenderCacheKey(RenderObject* renderObject);
 
 		void getForRender(RenderObject* renderObject);
+
+		void updateScene(Scene* scene);
+
+		void updateEnvironment(Scene* scene);
 	protected:
 		bool isToneMappingState = false;
+
+		std::shared_ptr<NodeBuilderState> _createNodeBuilderState(NodeBuilder* nodeBuilder);
 
 	private:
 		Renderer* renderer;

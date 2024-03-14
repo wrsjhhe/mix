@@ -35,8 +35,8 @@ namespace mix {
 		unsigned int activeCubeFace = 0;
 		unsigned int sampleCount = 1;
 
-		float width = 0;
-		float height = 0;
+		uint32_t width = 0;
+		uint32_t height = 0;
 
 		uint32_t occlusionQueryCount = 0;
 

@@ -2,6 +2,7 @@
 #include <renderers/common/Renderer.h>
 #include <renderers/WebGPUBackend.h>
 #include <renderers/common/RenderObject.h>
+#include <renderers/common/nodes/NodeBuilderState.h>
 #include <renderers/webgpu/nodes/WGSLNodeBuilder.h>
 #include <nodes/core/NodeFrame.h>
 #include <nodes/lighting/LightsNode.h>
@@ -106,4 +107,28 @@ void Nodes::getForRender(RenderObject* renderObject) {
 			nodeBuilder->build();
 		}
 	}
+}
+
+void Nodes::updateScene(Scene* scene) {
+
+}
+
+void Nodes::updateEnvironment(Scene* scene) {
+	auto sceneData = get(scene);
+
+	
+	
+}
+
+std::shared_ptr<NodeBuilderState> Nodes::_createNodeBuilderState(NodeBuilder* nodeBuilder) {
+	new NodeBuilderState(
+		nodeBuilder->vertexShader,
+		nodeBuilder->fragmentShader,
+		nodeBuilder->computeShader,
+		nodeBuilder->getAttributesArray(),
+		nodeBuilder->getBindings(),
+		nodeBuilder->updateNodes,
+		nodeBuilder->updateBeforeNodes,
+		nodeBuilder->transforms
+	);
 }
