@@ -25,7 +25,7 @@ const std::string& Nodes::getCacheKey(Scene* scene, LightsNode* lightsNode) {
 	std::vector<void*> chain{ scene ,lightsNode };
 	uint32_t callId = renderer->info.calls;
 
-	CacheKeyData* cacheKeyData = reinterpret_cast<CacheKeyData*>(callHashCache.get(chain));
+	std::shared_ptr<CacheKeyData> cacheKeyData = std::reinterpret_pointer_cast<CacheKeyData>(callHashCache.get(chain));
 	if (cacheKeyData == nullptr || cacheKeyData->callId != callId) {
 		EnvironmentNode* environmentNode = getEnvironmentNode(scene);
 		FogNode* fogNode = getFogNode(scene);
@@ -37,13 +37,13 @@ const std::string& Nodes::getCacheKey(Scene* scene, LightsNode* lightsNode) {
 		if (fogNode) cacheKey.emplace_back(fogNode->getCacheKey());
 		if (toneMappingNode) cacheKey.emplace_back(toneMappingNode->getCacheKey());
 
-		std::shared_ptr<CacheKeyData> cacheKeyDataPtr = std::make_shared<CacheKeyData>();
-		cacheKeyDataPtr->callId = callId;
-		cacheKeyDataPtr->cacheKey = utils::join(cacheKey, ",");
+		cacheKeyData = std::make_shared<CacheKeyData>();
+		cacheKeyData->callId = callId;
+		cacheKeyData->cacheKey = utils::join(cacheKey, ",");
 
-		callHashCache.set(chain, cacheKeyDataPtr);
+		callHashCache.set(chain, cacheKeyData);
 	}
-	cacheKeyData = reinterpret_cast<CacheKeyData*>(callHashCache.get(chain));
+
 	return cacheKeyData->cacheKey;
 }
 
@@ -87,7 +87,7 @@ const std::string& Nodes::getForRenderCacheKey(RenderObject* renderObject) {
 	return renderObject->initialCacheKey;
 }
 
-void Nodes::getForRender(RenderObject* renderObject) {
+NodeBuilderState* Nodes::getForRender(RenderObject* renderObject) {
 	RenderObjectData* renderObjectData = reinterpret_cast<RenderObjectData*>(get(renderObject));
 	
 	std::shared_ptr<NodeBuilderState>& nodeBuilderState = renderObjectData->nodeBuilderState;
@@ -105,8 +105,15 @@ void Nodes::getForRender(RenderObject* renderObject) {
 			nodeBuilder->toneMappingNode = getToneMappingNode();
 			nodeBuilder->clippingContext = renderObject->clippingContext.get();
 			nodeBuilder->build();
+
+			nodeBuilderState = _createNodeBuilderState(nodeBuilder.get());
+			nodeBuilderCache[cacheKey] = nodeBuilderState;
 		}
+
+		nodeBuilderState->usedTimes++;
 	}
+
+	return nodeBuilderState.get();
 }
 
 void Nodes::updateScene(Scene* scene) {
@@ -121,14 +128,11 @@ void Nodes::updateEnvironment(Scene* scene) {
 }
 
 std::shared_ptr<NodeBuilderState> Nodes::_createNodeBuilderState(NodeBuilder* nodeBuilder) {
-	new NodeBuilderState(
-		nodeBuilder->vertexShader,
+	return std::make_shared<NodeBuilderState>(nodeBuilder->vertexShader,
 		nodeBuilder->fragmentShader,
 		nodeBuilder->computeShader,
 		nodeBuilder->getAttributesArray(),
 		nodeBuilder->getBindings(),
 		nodeBuilder->updateNodes,
-		nodeBuilder->updateBeforeNodes,
-		nodeBuilder->transforms
-	);
+		nodeBuilder->updateBeforeNodes);
 }

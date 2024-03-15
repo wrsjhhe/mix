@@ -10,7 +10,7 @@ namespace mix {
 
 	class RenderLists {
 	public:
-		RenderList* get(const Scene*, const Camera*);
+		std::shared_ptr<RenderList> get(const Scene*, const Camera*);
 
 		void dispose();
 	private:

@@ -73,7 +73,7 @@ namespace mix {
 		ShaderContainer<std::string> flowCode;
 		ShaderContainer<NodeUniform*> uniforms;
 		ShaderContainer<StructTypeNode*> structs;
-		ShaderContainer<UniformGroupNode*> bindings;
+		ShaderContainer<std::vector<std::shared_ptr<NodeUniformsGroup>>> bindings;
 
 		BindingsOffset bindingsOffset;
 
@@ -117,7 +117,7 @@ namespace mix {
 
 		std::vector<NodeAttribute*> attributes;
 		std::vector<NodeAttribute*> bufferAttributes;
-		std::vector<NodeUniformsGroup*> bindingsArray;
+		std::vector<std::shared_ptr<NodeUniformsGroup>> bindingsArray;
 
 	public:
 		NodeBuilder(Object3D* object, Renderer* renderer, std::shared_ptr<NodeParser> parser, Scene* scene = nullptr, Material* material = nullptr);
@@ -188,9 +188,9 @@ namespace mix {
 		void buildUpdateNodes();
 
 		const std::vector<NodeAttribute*> getAttributesArray();
-		const std::vector<NodeUniformsGroup*>& getBindings();
+		const std::vector<std::shared_ptr<NodeUniformsGroup>>& getBindings();
 
 	private:
-		const std::vector<NodeUniformsGroup*>& _getSharedBindings(const std::vector<NodeUniformsGroup*>& bindings);
+		std::vector<std::shared_ptr<NodeUniformsGroup>> _getSharedBindings(const std::vector<std::shared_ptr<NodeUniformsGroup>>& bindings);
 	};
 }

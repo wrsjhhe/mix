@@ -8,7 +8,7 @@ namespace mix {
 	public:
 
 		std::vector<std::shared_ptr<UniformDescripter>> uniforms;
-
+		UniformsGroup() = default;
 		UniformsGroup(const std::string& name);
 		virtual ~UniformsGroup();
 

@@ -10,7 +10,7 @@ namespace mix {
 	public:
 		uint32_t id;
 		UniformGroupNode* groupNode = nullptr;
-
+		NodeUniformsGroup() = default;
 		NodeUniformsGroup(const std::string& name, UniformGroupNode* groupNode);
 		virtual ~NodeUniformsGroup();
 		bool shared();

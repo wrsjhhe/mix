@@ -5,6 +5,7 @@
 namespace mix {
 	class UniformBuffer : public Buffer {
 	public:
+		UniformBuffer() = default;
 		explicit UniformBuffer(const std::string& name, const std::vector<float>& buffer = std::vector<float>()):
 			Buffer(name, buffer)
 		{

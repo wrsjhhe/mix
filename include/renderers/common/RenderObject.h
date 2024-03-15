@@ -17,6 +17,7 @@ namespace mix {
 	class Pipeline;
 	class ClippingContext;
 	class Bindings;
+	class NodeBuilderState;
 
 	class RenderObject {
 		struct OnMaterialDispose : EventListener {
@@ -66,7 +67,7 @@ namespace mix {
 		std::string getCacheKey();
 		std::string getMaterialCacheKey();
 
-		void getNodeBuilderState();
+		NodeBuilderState* getNodeBuilderState();
 		Bindings* getBindings();
 
 
@@ -77,5 +78,6 @@ namespace mix {
 	private:
 		Nodes* _nodes = nullptr;
 		std::shared_ptr<Bindings> _bindings;
+		NodeBuilderState* _nodeBuilderState = nullptr;
 	};
 }

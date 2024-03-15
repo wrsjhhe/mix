@@ -130,7 +130,7 @@ void Renderer::render(Scene* scene, Camera* camera) {
 
 	renderList->begin();
 
-	_projectObject(scene, camera, 0, renderList);
+	_projectObject(scene, camera, 0, renderList.get());
 
 	renderList->finish();
 

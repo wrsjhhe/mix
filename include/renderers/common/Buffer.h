@@ -9,7 +9,7 @@ namespace mix {
 		uint32_t bytesPerElement = sizeof(float);
 
 		std::vector<float> _buffer;
-
+		Buffer() = default;
 		explicit Buffer(const std::string& name, const std::vector<float>& buffer = std::vector<float>());
 		virtual ~Buffer();
 

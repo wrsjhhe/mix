@@ -6,11 +6,14 @@
 #include <nodes/core/Node.h>
 #include <nodes/core/NodeCache.h>
 #include <nodes/core/StackNode.h>
+#include <nodes/core/UniformGroupNode.h>
+#include <nodes/core/UniformNode.h>
 #include <nodes/shadernode/ShaderNode.h>
 #include <renderers/common/Renderer.h>
 #include <renderers/common/nodes/NodeUniformsGroup.h>
 #include <nodes/materials/NodeMaterial.h>
 #include <nodes/core/constants.h>
+#include <utils/ChainMap.h>
 #include <unordered_map>
 #include <string>
 #include <regex>
@@ -27,6 +30,7 @@ std::unordered_map<uint32_t, std::string> typeFromLength = {
 	{16, "mat4"},
 };
 
+static ChainMap uniformsGroupCache;
 
 NodeBuilder::NodeBuilder(Object3D* object, Renderer* renderer, std::shared_ptr<NodeParser> parser, Scene* scene, Material* material):
 	object(object), renderer(renderer), parser(parser), scene(scene), material(material)
@@ -222,26 +226,47 @@ const std::vector<NodeAttribute*> NodeBuilder::getAttributesArray() {
 	return res;
 }
 
-const std::vector<NodeUniformsGroup*>& NodeBuilder::getBindings() {
+const std::vector<std::shared_ptr<NodeUniformsGroup>>& NodeBuilder::getBindings() {
 
 	if (bindingsArray.empty()) {
 
-		
-
+		std::vector<std::shared_ptr<NodeUniformsGroup>> _bindingsArray;
+		if (material != nullptr) {
+			_bindingsArray = bindings.value["vertex"];
+			_bindingsArray.insert(bindings.value["fragment"].begin(), bindings.value["fragment"].begin(), bindingsArray.end());
+			bindingsArray = _getSharedBindings(_bindingsArray);
+		}
+		else {
+			bindingsArray = _getSharedBindings(bindings.value["compute"]);
+		}
 	}
 
 	return bindingsArray;
 }
 
-const std::vector<NodeUniformsGroup*>& NodeBuilder::_getSharedBindings(const std::vector<NodeUniformsGroup*>& bindings) {
-	std::vector<NodeUniformsGroup*> shared;
+std::vector<std::shared_ptr<NodeUniformsGroup>> NodeBuilder::_getSharedBindings(const std::vector<std::shared_ptr<NodeUniformsGroup>>& bindings) {
+	std::vector<std::shared_ptr<NodeUniformsGroup>> shared;
 	for (auto& binding : bindings) {
 		if (binding->shared()) {
 			// nodes is the chainmap key
-			auto nodes = binding->getNodes();
+			std::vector<UniformNode*> nodes = binding->getNodes();
+			std::vector<void*> keys;
+			for (auto& node : nodes) {
+				keys.emplace_back(node);
+			}
+
+			std::shared_ptr<NodeUniformsGroup> sharedBinding = std::reinterpret_pointer_cast<NodeUniformsGroup>(uniformsGroupCache.get(keys));
+
+			if (sharedBinding == nullptr) {
+				uniformsGroupCache.set(keys, binding);
+				sharedBinding = binding;
+			}
+			shared.emplace_back(sharedBinding);
 		}
 		else {
-
+			shared.emplace_back(binding);
 		}
 	}
+
+	return shared;
 }

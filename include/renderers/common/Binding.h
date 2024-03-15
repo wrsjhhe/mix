@@ -9,7 +9,7 @@ namespace mix {
 		std::string name;
 		
 		uint32_t visibility = 0;
-
+		Binding() = default;
 		Binding(const std::string& name):name(name){}
 		Binding(const Binding& other) {
 			name = other.name;
@@ -19,10 +19,6 @@ namespace mix {
 
 		void setVisibility(uint32_t visibility) {
 			this->visibility |= visibility;
-		}
-
-		std::shared_ptr<Binding> clone() {
-			return std::make_shared<Binding>(*this);
 		}
 	};
 }

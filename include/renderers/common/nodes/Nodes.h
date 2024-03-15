@@ -53,7 +53,7 @@ namespace mix {
 
 		const std::string& getForRenderCacheKey(RenderObject* renderObject);
 
-		void getForRender(RenderObject* renderObject);
+		NodeBuilderState* getForRender(RenderObject* renderObject);
 
 		void updateScene(Scene* scene);
 
@@ -68,6 +68,6 @@ namespace mix {
 		WebGPUBackend* backend;
 
 		ChainMap callHashCache;
-		std::unordered_map<std::string, NodeBuilderState*> nodeBuilderCache;
+		std::unordered_map<std::string, std::shared_ptr<NodeBuilderState>> nodeBuilderCache;
 	};
 }

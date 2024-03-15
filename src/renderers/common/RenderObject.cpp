@@ -4,6 +4,7 @@
 #include <renderers/common/Renderer.h>
 #include <renderers/common/RenderContext.h>
 #include <renderers/common/Bindings.h>
+#include <renderers/common/nodes/NodeBuilderState.h>
 #include <core/Object3D.h>
 #include <materials/Material.h>
 #include <scenes/Scene.h>
@@ -64,8 +65,10 @@ std::string RenderObject::getMaterialCacheKey() {
 	return material->uuid();
 }
 
-void RenderObject::getNodeBuilderState() {
-	_nodes->getForRender(this);
+NodeBuilderState* RenderObject::getNodeBuilderState() {
+	if (_nodeBuilderState != nullptr) return _nodeBuilderState;
+
+	return _nodeBuilderState = _nodes->getForRender(this);
 }
 
 Bindings* RenderObject::getBindings() {

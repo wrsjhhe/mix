@@ -13,7 +13,7 @@ namespace mix {
             std::unordered_map<void*, std::shared_ptr<Node>> children;
         };
     public:
-        void* get(const std::vector<void*>& keys) {
+        std::shared_ptr<void> get(const std::vector<void*>& keys) {
             std::unordered_map<void*, std::shared_ptr<Node>>* children = &root->children;
             for (size_t i = 0; i < keys.size(); ++i) {
                 void* key = keys[i];
@@ -33,10 +33,10 @@ namespace mix {
                 return nullptr;
             }
 
-            return iter->second->value.lock().get();
+            return iter->second->value.lock();
         }
 
-        void* get(void* key) {
+        std::shared_ptr<void> get(void* key) {
             auto& children = root->children;
             auto iter = children.find(key);
             if (iter == children.end()) {
@@ -47,7 +47,7 @@ namespace mix {
                 remove(key);
                 return nullptr;
             }
-            return iter->second->value.lock().get();
+            return iter->second->value.lock();
         }
 
         void set(const std::vector<void*>& keys, std::shared_ptr<void> value) {
